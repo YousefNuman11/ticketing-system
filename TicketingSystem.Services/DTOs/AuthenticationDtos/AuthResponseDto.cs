@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using TicketingSystem.Services.DTOs.User;
 
-namespace TicketingSystem.Services.DTOs
+namespace TicketingSystem.Services.DTOs.AuthenticationDto
 {
     public class AuthResponseDto
     {

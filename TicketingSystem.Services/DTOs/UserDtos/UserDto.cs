@@ -1,4 +1,4 @@
-﻿namespace TicketingSystem.Services.DTOs
+﻿namespace TicketingSystem.Services.DTOs.User
 {
     public class UserDto
     {

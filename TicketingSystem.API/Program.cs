@@ -28,6 +28,8 @@ builder.Services.AddDbContext<TicketingSystemDbContext>(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IManagerService, ManagerService>();
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 //AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TicketingSystem.Services.DTOs;
+using TicketingSystem.Services.DTOs.AuthenticationDto;
 using TicketingSystem.Services.Service.Abstraction;
 
 namespace TicketingSystem.API.Controllers

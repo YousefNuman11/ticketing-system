@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
-using TicketingSystem.Services.DTOs;
+using TicketingSystem.Services.DTOs.User;
 using TicketingSystem.Services.Service.Abstraction;
 
 namespace TicketingSystem.Services.Service

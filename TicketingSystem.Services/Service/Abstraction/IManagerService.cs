@@ -1,5 +1,5 @@
 ﻿using TicketingSystem.Repository.Models;
-using TicketingSystem.Services.DTOs;
+using TicketingSystem.Services.DTOs.User;
 
 namespace TicketingSystem.Services.Service.Abstraction
 {

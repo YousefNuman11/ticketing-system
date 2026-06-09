@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TicketingSystem.Services.DTOs;
+using TicketingSystem.Services.DTOs.User;
 using TicketingSystem.Services.Service.Abstraction;
 
 namespace TicketingSystem.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Manager")] // only here
     public class ManagerController : ControllerBase
     {
         private readonly IManagerService _service;

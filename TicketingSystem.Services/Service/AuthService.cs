@@ -7,7 +7,8 @@ using System.Security.Claims;
 using System.Text;
 using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
-using TicketingSystem.Services.DTOs;
+using TicketingSystem.Services.DTOs.AuthenticationDto;
+using TicketingSystem.Services.DTOs.User;
 using TicketingSystem.Services.Service.Abstraction;
 using TicketingSystem.Services.Settings;
 

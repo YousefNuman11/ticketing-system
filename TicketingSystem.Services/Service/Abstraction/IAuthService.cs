@@ -1,4 +1,4 @@
-﻿using TicketingSystem.Services.DTOs;
+﻿using TicketingSystem.Services.DTOs.AuthenticationDto;
 
 namespace TicketingSystem.Services.Service.Abstraction
 {
