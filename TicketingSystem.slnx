@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+  </Folder>
   <Project Path="TicketingSystem.API/TicketingSystem.API.csproj" />
   <Project Path="TicketingSystem.Repository/TicketingSystem.Repository.csproj" />
   <Project Path="TicketingSystem.Services/TicketingSystem.Services.csproj" />
