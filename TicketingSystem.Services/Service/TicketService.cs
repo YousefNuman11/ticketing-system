@@ -41,5 +41,60 @@ namespace TicketingSystem.Services.Service
 
             return _mapper.Map<TicketDto>(ticket);
         }
+
+        public async Task<List<TicketDto>> GetMyTicketsAsync(Guid clientId)
+        {
+            var tickets = await _unitOfWork.Tickets.GetAllAsync();
+
+            var result = tickets
+                .Where(t => t.UserId == clientId)
+                .ToList();
+
+            return _mapper.Map<List<TicketDto>>(result);
+        }
+        public async Task<TicketDto?> GetTicketByIdAsync(Guid ticketId, Guid clientId)
+        {
+            var tickets = await _unitOfWork.Tickets.GetAllAsync();
+
+            var ticket = tickets
+                .FirstOrDefault(t => t.Id == ticketId && t.UserId == clientId);
+
+            if (ticket == null)
+                return null;
+
+            return _mapper.Map<TicketDto>(ticket);
+        }
+
+        public async Task AssignTicketAsync(Guid ticketId, Guid employeeId)
+        {
+            var ticket = await _unitOfWork.Tickets.GetByIdAsync(ticketId);
+
+            if (ticket == null)
+                throw new Exception("Ticket not found");
+
+            if (ticket.AssignedEmployeeId != null)
+                throw new Exception("Ticket already assigned");
+
+            var employee = await _unitOfWork.Users.GetByIdAsync(employeeId);
+
+            if (employee == null || employee.Role != UserRole.Employee)
+                throw new Exception("Invalid employee");
+
+            ticket.AssignedEmployeeId = employeeId;
+            ticket.Status = TicketStatus.InProgress;
+
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<List<TicketDto>> GetMyAssignedTicketsAsync(Guid employeeId)
+        {
+            var tickets = await _unitOfWork.Tickets.GetAllAsync();
+
+            var result = tickets
+                .Where(t => t.AssignedEmployeeId == employeeId)
+                .ToList();
+
+            return _mapper.Map<List<TicketDto>>(result);
+        }
     }
 }

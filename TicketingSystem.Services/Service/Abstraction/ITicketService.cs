@@ -7,5 +7,9 @@ namespace TicketingSystem.Services.Service.Abstraction
         Task<TicketDto> CreateTicketAsync(
             CreateTicketDto dto,
             Guid clientId);
+        Task<List<TicketDto>> GetMyTicketsAsync(Guid clientId);
+        Task<TicketDto?> GetTicketByIdAsync(Guid ticketId, Guid clientId);
+        Task AssignTicketAsync(Guid ticketId, Guid employeeId);
+        Task<List<TicketDto>> GetMyAssignedTicketsAsync(Guid employeeId);
     }
 }
