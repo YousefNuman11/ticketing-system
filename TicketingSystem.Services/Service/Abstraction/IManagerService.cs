@@ -1,5 +1,6 @@
 ﻿using TicketingSystem.Repository.Models;
 using TicketingSystem.Services.DTOs.User;
+using TicketingSystem.Services.DTOs.UserDtos;
 
 namespace TicketingSystem.Services.Service.Abstraction
 {
@@ -12,5 +13,7 @@ namespace TicketingSystem.Services.Service.Abstraction
         Task<UserDto?> UpdateUserAsync(Guid id, UpdateUserDto dto);
 
         Task<UserDto> CreateEmployeeAsync(CreateEmployeeDto dto);
+
+        Task<List<ClientWithTicketsDto>> GetClientsWithTicketsAsync();
     }
 }

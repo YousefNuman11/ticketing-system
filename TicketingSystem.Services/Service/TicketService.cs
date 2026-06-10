@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
 using TicketingSystem.Services.DTOs.CommentDtos;
 using TicketingSystem.Services.DTOs.TicketDtos;
 using TicketingSystem.Services.Service.Abstraction;
-using Microsoft.EntityFrameworkCore;
 
 namespace TicketingSystem.Services.Service
 {
@@ -125,12 +125,21 @@ namespace TicketingSystem.Services.Service
             return _mapper.Map<List<TicketDto>>(tickets);
         }
 
-        public async Task<CommentDto> AddCommentAsync(Guid ticketId,Guid userId,AddCommentDto dto)
+        public async Task<CommentDto> AddCommentAsync(
+            Guid ticketId,
+            Guid userId,
+            AddCommentDto dto)
         {
             var ticket = await _unitOfWork.Tickets.GetByIdAsync(ticketId);
 
             if (ticket == null)
                 throw new Exception("Ticket not found");
+
+            if (ticket.UserId != userId &&
+                ticket.AssignedEmployeeId != userId)
+            {
+                throw new Exception("Not allowed to comment on this ticket");
+            }
 
             var comment = _mapper.Map<TicketsComment>(dto);
 
@@ -148,21 +157,14 @@ namespace TicketingSystem.Services.Service
 
         public async Task<List<CommentDto>> GetCommentsAsync(Guid ticketId)
         {
-            var comments =
-                await _unitOfWork.TicketsComments.GetAllAsync();
-
-            return comments
+            var comments = await _unitOfWork.TicketsComments.Query()
                 .Where(c => c.TicketId == ticketId)
-                .Select(c => new CommentDto
-                {
-                    Id = c.Id,
-                    Text = c.Text,
-                    CreatedAt = c.CreatedAt
-                })
-                .ToList();
+                .ToListAsync();
+
+            return _mapper.Map<List<CommentDto>>(comments);
         }
 
-        public async Task ResolveTicketAsync(Guid ticketId,Guid employeeId)
+        public async Task ResolveTicketAsync(Guid ticketId, Guid employeeId)
         {
             var ticket = await _unitOfWork.Tickets.GetByIdAsync(ticketId);
 
@@ -177,7 +179,7 @@ namespace TicketingSystem.Services.Service
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task CloseTicketAsync(Guid ticketId,Guid clientId)
+        public async Task CloseTicketAsync(Guid ticketId, Guid clientId)
         {
             var ticket = await _unitOfWork.Tickets.GetByIdAsync(ticketId);
 
@@ -198,7 +200,9 @@ namespace TicketingSystem.Services.Service
 
         public async Task<List<TicketDto>> GetAllTicketsAsync(TicketFilterDto filter)
         {
-            var query = _unitOfWork.Tickets.Query();
+            var query = _unitOfWork.Tickets.Query()
+                .Include(t => t.User)
+                .Include(t => t.AssignedEmployee) as IQueryable<Ticket>;
 
             if (!string.IsNullOrWhiteSpace(filter.Status))
             {
@@ -223,11 +227,14 @@ namespace TicketingSystem.Services.Service
             return _mapper.Map<List<TicketDto>>(tickets);
         }
 
-        public async Task<TicketDto?> GetTicketDetailsAsync(
-            Guid ticketId)
+        public async Task<TicketDto?> GetTicketDetailsAsync(Guid ticketId)
         {
-            var ticket =
-                await _unitOfWork.Tickets.GetByIdAsync(ticketId);
+            var ticket = await _unitOfWork.Tickets.Query()
+                .Include(t => t.User)
+                .Include(t => t.AssignedEmployee)
+                .Include(t => t.TicketsComments)
+                    .ThenInclude(c => c.User)
+                .FirstOrDefaultAsync(t => t.Id == ticketId);
 
             if (ticket == null)
                 return null;

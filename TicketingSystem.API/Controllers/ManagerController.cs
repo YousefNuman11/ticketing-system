@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketingSystem.Services.DTOs.User;
-using TicketingSystem.Services.Service;
 using TicketingSystem.Services.Service.Abstraction;
 
 namespace TicketingSystem.API.Controllers
@@ -12,13 +11,10 @@ namespace TicketingSystem.API.Controllers
     public class ManagerController : ControllerBase
     {
         private readonly IManagerService _service;
-        private readonly ITicketService _ticketService;
 
-        public ManagerController(IManagerService service,
-            ITicketService ticketService)
+        public ManagerController(IManagerService service)
         {
             _service = service;
-            _ticketService = ticketService;
         }
 
         //Register Employee
@@ -59,5 +55,11 @@ namespace TicketingSystem.API.Controllers
             return user == null ? NotFound() : Ok(user);
         }
 
+        [Authorize(Roles = "Manager")]
+        [HttpGet("clients-with-tickets")]
+        public async Task<IActionResult> GetClientsWithTickets()
+        {
+            return Ok(await _service.GetClientsWithTicketsAsync());
+        }
     }
 }

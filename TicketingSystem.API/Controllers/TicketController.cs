@@ -158,5 +158,19 @@ namespace TicketingSystem.API.Controllers
                 Message = "Ticket closed successfully"
             });
         }
+
+        [Authorize(Roles = "Manager")]
+        [HttpGet("all")]
+        public async Task<IActionResult> GetTickets([FromQuery] TicketFilterDto filter)
+        {
+            return Ok(await _ticketService.GetAllTicketsAsync(filter));
+        }
+
+        [Authorize(Roles = "Manager")]
+        [HttpGet("info/{id}")]
+        public async Task<IActionResult> GetTicket(Guid id)
+        {
+            return Ok(await _ticketService.GetTicketDetailsAsync(id));
+        }
     }
 }

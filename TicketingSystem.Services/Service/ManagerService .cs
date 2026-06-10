@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
 using TicketingSystem.Services.DTOs.User;
+using TicketingSystem.Services.DTOs.UserDtos;
 using TicketingSystem.Services.Service.Abstraction;
 
 namespace TicketingSystem.Services.Service
@@ -87,6 +89,15 @@ namespace TicketingSystem.Services.Service
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<UserDto>(user);
+        }
+        public async Task<List<ClientWithTicketsDto>> GetClientsWithTicketsAsync()
+        {
+            var clients = await _unitOfWork.Users.Query()
+                .Where(u => u.Role == UserRole.Client)
+                .Include(u => u.CreatedTickets)
+                .ToListAsync();
+
+            return _mapper.Map<List<ClientWithTicketsDto>>(clients);
         }
     }
 }

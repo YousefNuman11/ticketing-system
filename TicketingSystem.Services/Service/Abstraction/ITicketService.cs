@@ -17,11 +17,8 @@ namespace TicketingSystem.Services.Service.Abstraction
         Task ResolveTicketAsync(Guid ticketId, Guid employeeId);
         Task CloseTicketAsync(Guid ticketId, Guid clientId);
 
-        //Manager
-        Task<List<TicketDto>> GetAllTicketsAsync(
-            TicketFilterDto filter);
+        Task<List<TicketDto>> GetAllTicketsAsync(TicketFilterDto filter);
 
-        Task<TicketDto?> GetTicketDetailsAsync(
-            Guid ticketId);
+        Task<TicketDto?> GetTicketDetailsAsync(Guid ticketId);
     }
 }
