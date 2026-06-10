@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TicketingSystem.Services.DTOs;
+using TicketingSystem.Services.DTOs.CommentDtos;
 using TicketingSystem.Services.DTOs.TicketDtos;
 using TicketingSystem.Services.Service.Abstraction;
 
@@ -78,6 +79,65 @@ namespace TicketingSystem.API.Controllers
         {
             await _ticketService.AssignTicketAsync(ticketId, employeeId);
             return Ok(new { message = "Ticket assigned successfully" });
+        }
+
+        [HttpGet("{ticketId}/comments")]
+        public async Task<IActionResult> GetComments(
+            Guid ticketId)
+        {
+            return Ok(
+                await _ticketService.GetCommentsAsync(ticketId));
+        }
+
+        [Authorize(Roles = "Client,Employee")]
+        [HttpPost("{ticketId}/comments")]
+        public async Task<IActionResult> AddComment(
+            Guid ticketId,
+            [FromBody] AddCommentDto dto)
+        {
+            var userId = Guid.Parse(
+                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            var result = await _ticketService.AddCommentAsync(
+                ticketId,
+                userId,
+                dto);
+
+            return Ok(result);
+        }
+
+        [Authorize(Roles = "Employee")]
+        [HttpPut("{ticketId}/resolve")]
+        public async Task<IActionResult> ResolveTicket(Guid ticketId)
+        {
+            var employeeId = Guid.Parse(
+                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            await _ticketService.ResolveTicketAsync(
+                ticketId,
+                employeeId);
+
+            return Ok(new
+            {
+                Message = "Ticket resolved successfully"
+            });
+        }
+
+        [Authorize(Roles = "Client")]
+        [HttpPut("{ticketId}/close")]
+        public async Task<IActionResult> CloseTicket(Guid ticketId)
+        {
+            var clientId = Guid.Parse(
+                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            await _ticketService.CloseTicketAsync(
+                ticketId,
+                clientId);
+
+            return Ok(new
+            {
+                Message = "Ticket closed successfully"
+            });
         }
     }
 }

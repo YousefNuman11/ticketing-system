@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using TicketingSystem.Repository.Models;
 using TicketingSystem.Services.DTOs.AuthenticationDto;
+using TicketingSystem.Services.DTOs.CommentDtos;
 using TicketingSystem.Services.DTOs.ProductDtos;
 using TicketingSystem.Services.DTOs.TicketDtos;
 using TicketingSystem.Services.DTOs.User;
@@ -25,5 +26,8 @@ public class MappingProfile : Profile
 
         CreateMap<CreateProductDto, Product>();
         CreateMap<Product, ProductDto>();
+
+        CreateMap<AddCommentDto, TicketsComment>();
+        CreateMap<TicketsComment, CommentDto>();
     }
 }
