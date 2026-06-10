@@ -18,6 +18,7 @@ public class MappingProfile : Profile
 
 
         CreateMap<CreateTicketDto, Ticket>();
+        CreateMap<UpdateTicketDto, Ticket>();
         CreateMap<Ticket, TicketDto>()
         .ForMember(
             d => d.Status,

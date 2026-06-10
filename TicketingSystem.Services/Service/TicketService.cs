@@ -4,6 +4,7 @@ using TicketingSystem.Repository.UnitOfWork.Abstraction;
 using TicketingSystem.Services.DTOs.CommentDtos;
 using TicketingSystem.Services.DTOs.TicketDtos;
 using TicketingSystem.Services.Service.Abstraction;
+using Microsoft.EntityFrameworkCore;
 
 namespace TicketingSystem.Services.Service
 {
@@ -43,22 +44,49 @@ namespace TicketingSystem.Services.Service
             return _mapper.Map<TicketDto>(ticket);
         }
 
+        public async Task<TicketDto?> UpdateTicketAsync(
+            Guid ticketId,
+            Guid clientId,
+            UpdateTicketDto dto)
+        {
+            var ticket = await _unitOfWork.Tickets.GetByIdAsync(ticketId);
+
+            if (ticket == null)
+                return null;
+
+            if (ticket.UserId != clientId)
+                throw new Exception("This ticket does not belong to you");
+
+            if (ticket.Status != TicketStatus.New)
+                throw new Exception(
+                    "Only new tickets can be edited");
+
+            var product = await _unitOfWork.Products.GetByIdAsync(dto.ProductId);
+
+            if (product == null)
+                throw new Exception("Product not found");
+
+            _mapper.Map(dto, ticket);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<TicketDto>(ticket);
+        }
+
         public async Task<List<TicketDto>> GetMyTicketsAsync(Guid clientId)
         {
-            var tickets = await _unitOfWork.Tickets.GetAllAsync();
-
-            var result = tickets
+            var tickets = await _unitOfWork.Tickets
+                .Query()
                 .Where(t => t.UserId == clientId)
-                .ToList();
+                .ToListAsync();
 
-            return _mapper.Map<List<TicketDto>>(result);
+            return _mapper.Map<List<TicketDto>>(tickets);
         }
         public async Task<TicketDto?> GetTicketByIdAsync(Guid ticketId, Guid clientId)
         {
-            var tickets = await _unitOfWork.Tickets.GetAllAsync();
-
-            var ticket = tickets
-                .FirstOrDefault(t => t.Id == ticketId && t.UserId == clientId);
+            var ticket = await _unitOfWork.Tickets
+                .Query()
+                .FirstOrDefaultAsync(t => t.Id == ticketId && t.UserId == clientId);
 
             if (ticket == null)
                 return null;
@@ -89,13 +117,12 @@ namespace TicketingSystem.Services.Service
 
         public async Task<List<TicketDto>> GetMyAssignedTicketsAsync(Guid employeeId)
         {
-            var tickets = await _unitOfWork.Tickets.GetAllAsync();
-
-            var result = tickets
+            var tickets = await _unitOfWork.Tickets
+                .Query()
                 .Where(t => t.AssignedEmployeeId == employeeId)
-                .ToList();
+                .ToListAsync();
 
-            return _mapper.Map<List<TicketDto>>(result);
+            return _mapper.Map<List<TicketDto>>(tickets);
         }
 
         public async Task<CommentDto> AddCommentAsync(Guid ticketId,Guid userId,AddCommentDto dto)
@@ -167,6 +194,45 @@ namespace TicketingSystem.Services.Service
             ticket.Status = TicketStatus.Closed;
 
             await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<List<TicketDto>> GetAllTicketsAsync(TicketFilterDto filter)
+        {
+            var query = _unitOfWork.Tickets.Query();
+
+            if (!string.IsNullOrWhiteSpace(filter.Status))
+            {
+                if (Enum.TryParse<TicketStatus>(filter.Status, out var status))
+                {
+                    query = query.Where(t => t.Status == status);
+                }
+            }
+
+            if (filter.EmployeeId.HasValue)
+            {
+                query = query.Where(t => t.AssignedEmployeeId == filter.EmployeeId.Value);
+            }
+
+            if (filter.ClientId.HasValue)
+            {
+                query = query.Where(t => t.UserId == filter.ClientId.Value);
+            }
+
+            var tickets = await query.ToListAsync();
+
+            return _mapper.Map<List<TicketDto>>(tickets);
+        }
+
+        public async Task<TicketDto?> GetTicketDetailsAsync(
+            Guid ticketId)
+        {
+            var ticket =
+                await _unitOfWork.Tickets.GetByIdAsync(ticketId);
+
+            if (ticket == null)
+                return null;
+
+            return _mapper.Map<TicketDto>(ticket);
         }
     }
 }

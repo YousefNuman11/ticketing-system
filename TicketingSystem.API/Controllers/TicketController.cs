@@ -61,6 +61,25 @@ namespace TicketingSystem.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Client")]
+        [HttpPut("{ticketId}")]
+        public async Task<IActionResult> UpdateTicket(
+            Guid ticketId,
+            UpdateTicketDto dto)
+        {
+            var clientId = Guid.Parse(
+                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            var result = await _ticketService.UpdateTicketAsync(
+                ticketId,
+                clientId,
+                dto);
+
+            return result == null
+                ? NotFound()
+                : Ok(result);
+        }
+
         [Authorize(Roles = "Employee")]
         [HttpGet("assigned")]
         public async Task<IActionResult> GetAssignedTickets()

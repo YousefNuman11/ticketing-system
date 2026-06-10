@@ -21,6 +21,7 @@ namespace TicketingSystem.API.Controllers
             _ticketService = ticketService;
         }
 
+        //Register Employee
         [HttpPost("employee")]
         public async Task<IActionResult> CreateEmployee(CreateEmployeeDto dto)
         {
@@ -28,6 +29,7 @@ namespace TicketingSystem.API.Controllers
             return Ok(result);
         }
 
+        //Get a List of Employees
         [HttpGet("employees")]
         public async Task<IActionResult> GetEmployees()
             => Ok(await _service.GetEmployeesAsync());
