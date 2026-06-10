@@ -1,15 +1,16 @@
-using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.Repositories.Abstraction;
+using TicketingSystem.Repository.Models;
 
 namespace TicketingSystem.Repository.UnitOfWork.Abstraction
 {
     public interface IUnitOfWork
     {
-        IGenericRepository<User> Users { get; }
-        IGenericRepository<Product> Products { get; }
-        IGenericRepository<Ticket> Tickets { get; }
-        IGenericRepository<TicketsComment> TicketsComments { get; }
-        IGenericRepository<TicketAttachment> TicketAttachments { get; }
+        IUserRepository Users { get; }
+        ITicketRepository Tickets { get; }
+        IProductRepository Products { get; }
+        ITicketCommentRepository TicketsComments { get; }
+        ITicketAttachmentRepository TicketAttachments { get; }
+
         Task<int> SaveChangesAsync();
     }
 }

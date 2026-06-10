@@ -10,21 +10,21 @@ namespace TicketingSystem.Repository.UnitOfWork
     {
         private readonly TicketingSystemDbContext _context;
 
-        public IGenericRepository<User> Users { get; }
-        public IGenericRepository<Product> Products { get; }
-        public IGenericRepository<Ticket> Tickets { get; }
-        public IGenericRepository<TicketsComment> TicketsComments { get; }
-        public IGenericRepository<TicketAttachment> TicketAttachments { get; }
+        public IUserRepository Users { get; }
+        public ITicketRepository Tickets { get; }
+        public IProductRepository Products { get; }
+        public ITicketCommentRepository TicketsComments { get; }
+        public ITicketAttachmentRepository TicketAttachments { get; }
 
         public UnitOfWork(TicketingSystemDbContext context)
         {
             _context = context;
 
-            Users = new GenericRepository<User>(context);
-            Products = new GenericRepository<Product>(context);
-            Tickets = new GenericRepository<Ticket>(context);
-            TicketsComments = new GenericRepository<TicketsComment>(context);
-            TicketAttachments = new GenericRepository<TicketAttachment>(context);
+            Users = new UserRepository(context);
+            Tickets = new TicketRepository(context);
+            Products = new ProductRepository(context);
+            TicketsComments = new TicketCommentRepository(context);
+            TicketAttachments = new TicketAttachmentRepository(context);
         }
 
         public async Task<int> SaveChangesAsync()

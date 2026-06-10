@@ -1,10 +1,14 @@
 ﻿using TicketingSystem.Repository.Models;
-using TicketingSystem.Repository.Repositories.Abstraction;
 
-public interface IUserRepository
-    : IGenericRepository<User>
+namespace TicketingSystem.Repository.Repositories.Abstraction
 {
-    Task<IEnumerable<User>> GetEmployeesAsync();
+    public interface IUserRepository : IGenericRepository<User>
+    {
+        IQueryable<User> GetUsersQuery();
 
-    Task<IEnumerable<User>> GetClientsAsync();
+
+        IQueryable<User> GetByRole(UserRole role);
+
+        IQueryable<User> GetClientsWithTickets();
+    }
 }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TicketingSystem.Services.DTOs.TicketDtos;
 using TicketingSystem.Services.DTOs.User;
+using TicketingSystem.Services.Service;
 using TicketingSystem.Services.Service.Abstraction;
 
 namespace TicketingSystem.API.Controllers
@@ -11,13 +13,16 @@ namespace TicketingSystem.API.Controllers
     public class ManagerController : ControllerBase
     {
         private readonly IManagerService _service;
+        private readonly ITicketService _ticketService;
 
-        public ManagerController(IManagerService service)
+        public ManagerController(IManagerService service,
+            ITicketService ticketService)
         {
             _service = service;
+            _ticketService = ticketService;
         }
 
-        //Register Employee
+        // Register Employee
         [HttpPost("employee")]
         public async Task<IActionResult> CreateEmployee(CreateEmployeeDto dto)
         {
@@ -30,10 +35,12 @@ namespace TicketingSystem.API.Controllers
         public async Task<IActionResult> GetEmployees()
             => Ok(await _service.GetEmployeesAsync());
 
+        // Get a list of client
         [HttpGet("clients")]
         public async Task<IActionResult> GetClients()
             => Ok(await _service.GetClientsAsync());
 
+        //Get a client by Id
         [HttpGet("users/{id}")]
         public async Task<IActionResult> GetUser(Guid id)
         {
@@ -41,6 +48,7 @@ namespace TicketingSystem.API.Controllers
             return user == null ? NotFound() : Ok(user);
         }
 
+        // Toggle user status
         [HttpPut("users/{id}/toggle-status")]
         public async Task<IActionResult> Toggle(Guid id)
         {
@@ -48,6 +56,7 @@ namespace TicketingSystem.API.Controllers
             return user == null ? NotFound() : Ok(user);
         }
 
+        // Update the users info
         [HttpPut("users/{id}")]
         public async Task<IActionResult> Update(Guid id, UpdateUserDto dto)
         {
@@ -55,11 +64,37 @@ namespace TicketingSystem.API.Controllers
             return user == null ? NotFound() : Ok(user);
         }
 
+        // Get a List of Clients with their tickets
         [Authorize(Roles = "Manager")]
         [HttpGet("clients-with-tickets")]
         public async Task<IActionResult> GetClientsWithTickets()
         {
             return Ok(await _service.GetClientsWithTicketsAsync());
+        }
+
+        //Assign ticket to spec. employee
+        [Authorize(Roles = "Manager")]
+        [HttpPut("{ticketId}/assign/{employeeId}")]
+        public async Task<IActionResult> Assign(Guid ticketId, Guid employeeId)
+        {
+            await _ticketService.AssignTicketAsync(ticketId, employeeId);
+            return Ok(new { message = "Ticket assigned successfully" });
+        }
+
+        // List all tickets with status / employees/ external clients 
+        [Authorize(Roles = "Manager")]
+        [HttpGet("all")]
+        public async Task<IActionResult> GetTickets([FromQuery] TicketFilterDto filter)
+        {
+            return Ok(await _ticketService.GetAllTicketsAsync(filter));
+        }
+
+        //view ticket information
+        [Authorize(Roles = "Manager")]
+        [HttpGet("info/{id}")]
+        public async Task<IActionResult> GetTicket(Guid id)
+        {
+            return Ok(await _ticketService.GetTicketDetailsAsync(id));
         }
     }
 }

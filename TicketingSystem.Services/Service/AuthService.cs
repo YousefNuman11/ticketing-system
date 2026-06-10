@@ -42,14 +42,14 @@ namespace TicketingSystem.Services.Service
             var user = _mapper.Map<User>(dto);
 
             user.Id = Guid.NewGuid();
-            user.Role = UserRole.Client;
+            user.Role = UserRole.Client; // To make sure that only the manager can add Employee
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
             user.IsActive = true;
 
             await _unitOfWork.Users.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();
 
-
+            // Auto login after register
             var token = GenerateToken(user);
 
             return new AuthResponseDto
@@ -68,6 +68,7 @@ namespace TicketingSystem.Services.Service
                 x.Email == dto.Identifier ||
                 x.MobileNumber == dto.Identifier);
 
+            // Only active user can login
             if (user == null || !user.IsActive)
                 throw new Exception("Invalid credentials");
 

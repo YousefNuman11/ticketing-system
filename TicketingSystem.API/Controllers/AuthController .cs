@@ -16,6 +16,7 @@ namespace TicketingSystem.API.Controllers
             _auth = auth;
         }
 
+        // Client Register
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto dto)
         {
@@ -23,6 +24,7 @@ namespace TicketingSystem.API.Controllers
             return Ok(result);
         }
 
+        // Client and Employee Login
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto dto)
         {

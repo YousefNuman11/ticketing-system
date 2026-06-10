@@ -19,6 +19,7 @@ namespace TicketingSystem.Services.Service
             _mapper = mapper;
         }
 
+        // CREATE EMPLOYEE 
         public async Task<UserDto> CreateEmployeeAsync(CreateEmployeeDto dto)
         {
             var user = _mapper.Map<User>(dto);
@@ -34,38 +35,38 @@ namespace TicketingSystem.Services.Service
             return _mapper.Map<UserDto>(user);
         }
 
+        // GET EMPLOYEES 
         public async Task<List<UserDto>> GetEmployeesAsync()
         {
-            var users = await _unitOfWork.Users.GetAllAsync();
+            var employees = await _unitOfWork.Users
+                .GetByRole(UserRole.Employee)
+                .ToListAsync();
 
-            var filtered = users.Where(x => x.Role == UserRole.Employee);
-
-            return _mapper.Map<List<UserDto>>(filtered);
+            return _mapper.Map<List<UserDto>>(employees);
         }
 
+        // GET CLIENTS
         public async Task<List<UserDto>> GetClientsAsync()
         {
-            var users = await _unitOfWork.Users.GetAllAsync();
+            var clients = await _unitOfWork.Users
+                .GetByRole(UserRole.Client)
+                .ToListAsync();
 
-            var filtered = users.Where(x => x.Role == UserRole.Client);
-
-            return _mapper.Map<List<UserDto>>(filtered);
+            return _mapper.Map<List<UserDto>>(clients);
         }
 
+        //  GET BY ID 
         public async Task<UserDto?> GetUserByIdAsync(Guid id)
         {
-            var users = await _unitOfWork.Users.GetAllAsync();
-
-            var user = users.FirstOrDefault(x => x.Id == id);
+            var user = await _unitOfWork.Users.GetByIdAsync(id);
 
             return user == null ? null : _mapper.Map<UserDto>(user);
         }
 
+        // TOGGLE STATUS
         public async Task<UserDto?> ToggleUserStatusAsync(Guid id)
         {
-            var users = await _unitOfWork.Users.GetAllAsync();
-
-            var user = users.FirstOrDefault(x => x.Id == id);
+            var user = await _unitOfWork.Users.GetByIdAsync(id);
 
             if (user == null) return null;
 
@@ -76,25 +77,25 @@ namespace TicketingSystem.Services.Service
             return _mapper.Map<UserDto>(user);
         }
 
+        // UPDATE USER 
         public async Task<UserDto?> UpdateUserAsync(Guid id, UpdateUserDto dto)
         {
-            var users = await _unitOfWork.Users.GetAllAsync();
-
-            var user = users.FirstOrDefault(x => x.Id == id);
+            var user = await _unitOfWork.Users.GetByIdAsync(id);
 
             if (user == null) return null;
 
-            _mapper.Map(dto, user); 
+            _mapper.Map(dto, user);
 
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<UserDto>(user);
         }
+
+        //  CLIENTS WITH TICKETS 
         public async Task<List<ClientWithTicketsDto>> GetClientsWithTicketsAsync()
         {
-            var clients = await _unitOfWork.Users.Query()
-                .Where(u => u.Role == UserRole.Client)
-                .Include(u => u.CreatedTickets)
+            var clients = await _unitOfWork.Users
+                .GetClientsWithTickets()
                 .ToListAsync();
 
             return _mapper.Map<List<ClientWithTicketsDto>>(clients);

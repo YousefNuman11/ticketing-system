@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using TicketingSystem.Services.DTOs;
 using TicketingSystem.Services.DTOs.CommentDtos;
 using TicketingSystem.Services.DTOs.TicketDtos;
 using TicketingSystem.Services.Service.Abstraction;
@@ -20,7 +19,8 @@ namespace TicketingSystem.API.Controllers
             _ticketService = ticketService;
         }
 
-        [Authorize(Roles ="Client")]
+        //List of all tickets related to a spec. client
+        [Authorize(Roles = "Client")]
         [HttpGet("myTickets")]
         public async Task<IActionResult> GetMyTickets()
         {
@@ -44,6 +44,7 @@ namespace TicketingSystem.API.Controllers
             return Ok(result);
         }
 
+        //Client can add new ticket
         [HttpPost]
         [Authorize(Roles = "Client")]
         public async Task<IActionResult> CreateTicket(
@@ -61,6 +62,7 @@ namespace TicketingSystem.API.Controllers
             return Ok(result);
         }
 
+        //Modify a ticket if its status is Open
         [Authorize(Roles = "Client")]
         [HttpPut("{ticketId}")]
         public async Task<IActionResult> UpdateTicket(
@@ -80,6 +82,7 @@ namespace TicketingSystem.API.Controllers
                 : Ok(result);
         }
 
+        // Employees will see a list of assigned tickets
         [Authorize(Roles = "Employee")]
         [HttpGet("assigned")]
         public async Task<IActionResult> GetAssignedTickets()
@@ -92,14 +95,7 @@ namespace TicketingSystem.API.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "Manager")]
-        [HttpPut("{ticketId}/assign/{employeeId}")]
-        public async Task<IActionResult> Assign(Guid ticketId, Guid employeeId)
-        {
-            await _ticketService.AssignTicketAsync(ticketId, employeeId);
-            return Ok(new { message = "Ticket assigned successfully" });
-        }
-
+        // Get comments for spec. ticket
         [HttpGet("{ticketId}/comments")]
         public async Task<IActionResult> GetComments(
             Guid ticketId)
@@ -108,6 +104,7 @@ namespace TicketingSystem.API.Controllers
                 await _ticketService.GetCommentsAsync(ticketId));
         }
 
+        //The client and employee can see the comments and reply to each other
         [Authorize(Roles = "Client,Employee")]
         [HttpPost("{ticketId}/comments")]
         public async Task<IActionResult> AddComment(
@@ -125,6 +122,7 @@ namespace TicketingSystem.API.Controllers
             return Ok(result);
         }
 
+        //The employee will resolve the ticket.
         [Authorize(Roles = "Employee")]
         [HttpPut("{ticketId}/resolve")]
         public async Task<IActionResult> ResolveTicket(Guid ticketId)
@@ -142,6 +140,7 @@ namespace TicketingSystem.API.Controllers
             });
         }
 
+        //The client can close it if everything is ok.
         [Authorize(Roles = "Client")]
         [HttpPut("{ticketId}/close")]
         public async Task<IActionResult> CloseTicket(Guid ticketId)
@@ -157,20 +156,6 @@ namespace TicketingSystem.API.Controllers
             {
                 Message = "Ticket closed successfully"
             });
-        }
-
-        [Authorize(Roles = "Manager")]
-        [HttpGet("all")]
-        public async Task<IActionResult> GetTickets([FromQuery] TicketFilterDto filter)
-        {
-            return Ok(await _ticketService.GetAllTicketsAsync(filter));
-        }
-
-        [Authorize(Roles = "Manager")]
-        [HttpGet("info/{id}")]
-        public async Task<IActionResult> GetTicket(Guid id)
-        {
-            return Ok(await _ticketService.GetTicketDetailsAsync(id));
         }
     }
 }

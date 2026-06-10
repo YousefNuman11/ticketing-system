@@ -4,7 +4,12 @@ namespace TicketingSystem.Repository.Repositories.Abstraction
 {
     public interface ITicketRepository : IGenericRepository<Ticket>
     {
-        Task<List<Ticket>> GetTicketsInformation();
-        Task<List<Ticket>> GetByUserId(Guid userId);
+        IQueryable<Ticket> QueryTickets();
+
+        Task<Ticket?> GetTicketWithDetailsAsync(Guid ticketId);
+
+        IQueryable<Ticket> GetByUserId(Guid userId);
+
+        Task<Ticket?> GetTicketDetailsAsync(Guid ticketId);
     }
 }

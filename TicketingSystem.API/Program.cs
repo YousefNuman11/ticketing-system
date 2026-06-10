@@ -72,6 +72,7 @@ builder.Services
 var app = builder.Build();
 
 
+// Seeding the manager
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<TicketingSystemDbContext>();
