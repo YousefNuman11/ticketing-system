@@ -36,6 +36,7 @@ namespace TicketingSystem.Services.Service
             ticket.Id = Guid.NewGuid();
             ticket.UserId = clientId;
             ticket.Status = TicketStatus.New;
+            ticket.CreatedAt = DateTime.UtcNow;
 
             await _unitOfWork.Tickets.AddAsync(ticket);
 
