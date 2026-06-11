@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketingSystem.Services.DTOs.ProductDtos;
+using TicketingSystem.Services.Helpers;
 using TicketingSystem.Services.Service.Abstraction;
 
 namespace TicketingSystem.API.Controllers
@@ -25,9 +26,9 @@ namespace TicketingSystem.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromBody] PaginationDto pagination)
         {
-            return Ok(await _service.GetAllAsync());
+            return Ok(await _service.GetAllAsync(pagination));
         }
     }
 }

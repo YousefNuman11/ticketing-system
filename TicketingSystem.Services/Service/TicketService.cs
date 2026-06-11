@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using TicketingSystem.Repository.Models;
+using TicketingSystem.Repository.Specifications;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
 using TicketingSystem.Services.DTOs.CommentDtos;
 using TicketingSystem.Services.DTOs.TicketAttachmentDto;
 using TicketingSystem.Services.DTOs.TicketDtos;
+using TicketingSystem.Services.Helpers;
 using TicketingSystem.Services.Service.Abstraction;
 
 namespace TicketingSystem.Services.Service
@@ -69,21 +71,29 @@ namespace TicketingSystem.Services.Service
         }
 
         // MY TICKETS 
-        public async Task<List<TicketDto>> GetMyTicketsAsync(Guid clientId)
+        public async Task<PagedResult<TicketDto>> GetMyTicketsAsync(
+            Guid clientId,
+            PaginationDto pagination)
         {
-            var tickets = await _unitOfWork.Tickets
-                .GetByUserId(clientId)
-                .ToListAsync();
+            var spec = new TicketsByUserSpec(clientId);
 
-            return _mapper.Map<List<TicketDto>>(tickets);
+            var query = _unitOfWork.Tickets.Query(spec);
+
+            return await PaginationHelper
+                .ToPagedResultAsync<Ticket, TicketDto>(
+                    query,
+                    pagination,
+                    _mapper);
         }
 
-        // BY ID 
+        // get Ticket BY ID 
         public async Task<TicketDto?> GetTicketByIdAsync(Guid ticketId, Guid clientId)
         {
-            var ticket = await _unitOfWork.Tickets
-                .GetByUserId(clientId)
-                .FirstOrDefaultAsync(t => t.Id == ticketId);
+            var spec = new TicketDetailsSpec(ticketId);
+
+            var query = _unitOfWork.Tickets.Query(spec);
+
+            var ticket = await query.FirstOrDefaultAsync();
 
             return ticket == null ? null : _mapper.Map<TicketDto>(ticket);
         }
@@ -111,14 +121,19 @@ namespace TicketingSystem.Services.Service
         }
 
         // MY ASSIGNED
-        public async Task<List<TicketDto>> GetMyAssignedTicketsAsync(Guid employeeId)
+        public async Task<PagedResult<TicketDto>> GetMyAssignedTicketsAsync(
+             Guid employeeId,
+             PaginationDto pagination)
         {
-            var tickets = await _unitOfWork.Tickets
-                .QueryTickets()
-                .Where(t => t.AssignedEmployeeId == employeeId)
-                .ToListAsync();
+            var spec = new AssignedTicketsSpec(employeeId);
 
-            return _mapper.Map<List<TicketDto>>(tickets);
+            var query = _unitOfWork.Tickets.Query(spec);
+
+            return await PaginationHelper
+                .ToPagedResultAsync<Ticket, TicketDto>(
+                    query,
+                    pagination,
+                    _mapper);
         }
 
         // COMMENTS
@@ -145,14 +160,18 @@ namespace TicketingSystem.Services.Service
             return _mapper.Map<CommentDto>(comment);
         }
 
-        public async Task<List<CommentDto>> GetCommentsAsync(Guid ticketId)
+        // GET Comments
+        public async Task<PagedResult<CommentDto>> GetCommentsAsync(
+             Guid ticketId,
+             PaginationDto pagination)
         {
-            var comments = await _unitOfWork.TicketsComments
-                .GetByTicketId(ticketId)
-                .ToListAsync();
+            var query = _unitOfWork.TicketsComments
+                .GetByTicketId(ticketId);
 
-            return _mapper.Map<List<CommentDto>>(comments);
+            return await PaginationHelper
+                .ToPagedResultAsync<TicketsComment, CommentDto>(query, pagination, _mapper);
         }
+
 
         //RESOLVE
         public async Task ResolveTicketAsync(Guid ticketId, Guid employeeId)
@@ -190,9 +209,11 @@ namespace TicketingSystem.Services.Service
         }
 
         //FILTER ALL 
-        public async Task<List<TicketDto>> GetAllTicketsAsync(TicketFilterDto filter)
+        public async Task<PagedResult<TicketDto>> GetAllTicketsAsync(
+            TicketFilterDto filter,
+            PaginationDto pagination)
         {
-            var query = _unitOfWork.Tickets.QueryTickets();
+            IQueryable<Ticket> query = _unitOfWork.Tickets.QueryTickets();
 
             if (!string.IsNullOrWhiteSpace(filter.Status) &&
                 Enum.TryParse<TicketStatus>(filter.Status, out var status))
@@ -201,20 +222,29 @@ namespace TicketingSystem.Services.Service
             }
 
             if (filter.EmployeeId.HasValue)
-                query = query.Where(t => t.AssignedEmployeeId == filter.EmployeeId);
+            {
+                query = query.Where(t => t.AssignedEmployeeId == filter.EmployeeId.Value);
+            }
 
             if (filter.ClientId.HasValue)
-                query = query.Where(t => t.UserId == filter.ClientId);
+            {
+                query = query.Where(t => t.UserId == filter.ClientId.Value);
+            }
 
-            var tickets = await query.ToListAsync();
+            var result = await PaginationHelper
+                .ToPagedResultAsync<Ticket, TicketDto>(query, pagination, _mapper);
 
-            return _mapper.Map<List<TicketDto>>(tickets);
+            return result;
         }
 
         //DETAILS
         public async Task<TicketDto?> GetTicketDetailsAsync(Guid ticketId)
         {
-            var ticket = await _unitOfWork.Tickets.GetTicketWithDetailsAsync(ticketId);
+            var spec = new TicketDetailsSpec(ticketId);
+
+            var query = _unitOfWork.Tickets.Query(spec);
+
+            var ticket = await query.FirstOrDefaultAsync();
 
             return ticket == null ? null : _mapper.Map<TicketDto>(ticket);
         }
@@ -265,6 +295,7 @@ namespace TicketingSystem.Services.Service
             attachment.Id = Guid.NewGuid();
             attachment.TicketId = ticketId;
             attachment.FileUrl = uniqueFileName;
+            attachment.UploadedBy = userId;
             attachment.CreatedAt = DateTime.UtcNow;
 
             await _unitOfWork.TicketAttachments.AddAsync(attachment);
@@ -275,14 +306,19 @@ namespace TicketingSystem.Services.Service
         }
 
         // Get Attachment
-        public async Task<List<AttachmentDto>> GetAttachmentsAsync(
-            Guid ticketId)
+        public async Task<PagedResult<AttachmentDto>> GetAttachmentsAsync(
+            Guid ticketId,
+            PaginationDto pagination)
         {
-            var attachments = await _unitOfWork.TicketAttachments
-                .GetByTicketId(ticketId)
-                .ToListAsync();
+            var spec = new AttachmentsByTicketSpec(ticketId);
 
-            return _mapper.Map<List<AttachmentDto>>(attachments);
+            var query = _unitOfWork.TicketAttachments.Query(spec);
+
+            return await PaginationHelper
+                .ToPagedResultAsync<TicketAttachment, AttachmentDto>(
+                    query,
+                    pagination,
+                    _mapper);
         }
     }
 }

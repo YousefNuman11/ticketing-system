@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TicketingSystem.Repository.Models;
+using TicketingSystem.Repository.Specifications.Users;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
 using TicketingSystem.Services.DTOs.User;
 using TicketingSystem.Services.DTOs.UserDtos;
+using TicketingSystem.Services.Helpers;
 using TicketingSystem.Services.Service.Abstraction;
 
 namespace TicketingSystem.Services.Service
@@ -19,7 +21,7 @@ namespace TicketingSystem.Services.Service
             _mapper = mapper;
         }
 
-        // CREATE EMPLOYEE 
+        //CREATE EMPLOYEE
         public async Task<UserDto> CreateEmployeeAsync(CreateEmployeeDto dto)
         {
             var user = _mapper.Map<User>(dto);
@@ -35,35 +37,40 @@ namespace TicketingSystem.Services.Service
             return _mapper.Map<UserDto>(user);
         }
 
-        // GET EMPLOYEES 
-        public async Task<List<UserDto>> GetEmployeesAsync()
+        //GET EMPLOYEES
+        public async Task<PagedResult<UserDto>> GetEmployeesAsync(PaginationDto pagination)
         {
-            var employees = await _unitOfWork.Users
-                .GetByRole(UserRole.Employee)
-                .ToListAsync();
+            var spec = new EmployeesSpec();
 
-            return _mapper.Map<List<UserDto>>(employees);
+            var query = _unitOfWork.Users.Query(spec);
+
+            return await PaginationHelper
+                .ToPagedResultAsync<User, UserDto>(query, pagination, _mapper);
         }
 
-        // GET CLIENTS
-        public async Task<List<UserDto>> GetClientsAsync()
+        // GET CLIENTS 
+        public async Task<PagedResult<UserDto>> GetClientsAsync(PaginationDto pagination)
         {
-            var clients = await _unitOfWork.Users
-                .GetByRole(UserRole.Client)
-                .ToListAsync();
+            var spec = new ClientsSpec();
 
-            return _mapper.Map<List<UserDto>>(clients);
+            var query = _unitOfWork.Users.Query(spec);
+
+            return await PaginationHelper
+                .ToPagedResultAsync<User, UserDto>(query, pagination, _mapper);
         }
 
-        //  GET BY ID 
+        // GET USER BY ID 
         public async Task<UserDto?> GetUserByIdAsync(Guid id)
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(id);
+            var spec = new UserByIdSpec(id);
 
-            return user == null ? null : _mapper.Map<UserDto>(user);
+            var user = await _unitOfWork.Users.Query(spec)
+                .FirstOrDefaultAsync();
+
+            return user == null ? null : _mapper.Map<UserDto>(user); ;
         }
 
-        // TOGGLE STATUS
+        //  TOGGLE STATUS
         public async Task<UserDto?> ToggleUserStatusAsync(Guid id)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(id);
@@ -77,7 +84,7 @@ namespace TicketingSystem.Services.Service
             return _mapper.Map<UserDto>(user);
         }
 
-        // UPDATE USER 
+        //UPDATE USER
         public async Task<UserDto?> UpdateUserAsync(Guid id, UpdateUserDto dto)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(id);
@@ -91,14 +98,16 @@ namespace TicketingSystem.Services.Service
             return _mapper.Map<UserDto>(user);
         }
 
-        //  CLIENTS WITH TICKETS 
-        public async Task<List<ClientWithTicketsDto>> GetClientsWithTicketsAsync()
+        //CLIENTS WITH TICKETS
+        public async Task<PagedResult<ClientWithTicketsDto>> GetClientsWithTicketsAsync(
+            PaginationDto pagination)
         {
-            var clients = await _unitOfWork.Users
-                .GetClientsWithTickets()
-                .ToListAsync();
+            var spec = new ClientsSpec();
 
-            return _mapper.Map<List<ClientWithTicketsDto>>(clients);
+            var query = _unitOfWork.Users.Query(spec);
+
+            return await PaginationHelper
+                .ToPagedResultAsync<User, ClientWithTicketsDto>(query, pagination, _mapper);
         }
     }
 }

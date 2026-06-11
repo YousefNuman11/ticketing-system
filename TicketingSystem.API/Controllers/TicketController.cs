@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TicketingSystem.Services.DTOs.CommentDtos;
 using TicketingSystem.Services.DTOs.TicketDtos;
+using TicketingSystem.Services.Helpers;
 using TicketingSystem.Services.Service.Abstraction;
 
 namespace TicketingSystem.API.Controllers
@@ -22,12 +23,13 @@ namespace TicketingSystem.API.Controllers
         //List of all tickets related to a spec. client
         [Authorize(Roles = "Client")]
         [HttpGet("myTickets")]
-        public async Task<IActionResult> GetMyTickets()
+        public async Task<IActionResult> GetMyTickets([FromQuery] PaginationDto pagination)
         {
-            var clientId = Guid.Parse(
-                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var clientId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            return Ok(await _ticketService.GetMyTicketsAsync(clientId));
+            var result = await _ticketService.GetMyTicketsAsync(clientId, pagination);
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
@@ -85,12 +87,11 @@ namespace TicketingSystem.API.Controllers
         // Employees will see a list of assigned tickets
         [Authorize(Roles = "Employee")]
         [HttpGet("assigned")]
-        public async Task<IActionResult> GetAssignedTickets()
+        public async Task<IActionResult> GetAssignedTickets([FromQuery] PaginationDto pagination)
         {
-            var employeeId = Guid.Parse(
-                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var employeeId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var result = await _ticketService.GetMyAssignedTicketsAsync(employeeId);
+            var result = await _ticketService.GetMyAssignedTicketsAsync(employeeId, pagination);
 
             return Ok(result);
         }
@@ -98,10 +99,12 @@ namespace TicketingSystem.API.Controllers
         // Get comments for spec. ticket
         [HttpGet("{ticketId}/comments")]
         public async Task<IActionResult> GetComments(
-            Guid ticketId)
+            Guid ticketId,
+            [FromQuery] PaginationDto pagination)
         {
-            return Ok(
-                await _ticketService.GetCommentsAsync(ticketId));
+            var result = await _ticketService.GetCommentsAsync(ticketId, pagination);
+
+            return Ok(result);
         }
 
         //The client and employee can see the comments and reply to each other
@@ -161,10 +164,12 @@ namespace TicketingSystem.API.Controllers
         //Get Attachment
         [HttpGet("{ticketId}/attachments")]
         public async Task<IActionResult> GetAttachments(
-            Guid ticketId)
+            Guid ticketId,
+            [FromQuery] PaginationDto pagination)
         {
-            return Ok(
-                await _ticketService.GetAttachmentsAsync(ticketId));
+            var result = await _ticketService.GetAttachmentsAsync(ticketId, pagination);
+
+            return Ok(result);
         }
 
         //Upload Attachment

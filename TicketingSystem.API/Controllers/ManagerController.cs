@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TicketingSystem.Services.DTOs.TicketDtos;
 using TicketingSystem.Services.DTOs.User;
+using TicketingSystem.Services.Helpers;
 using TicketingSystem.Services.Service;
 using TicketingSystem.Services.Service.Abstraction;
 
@@ -32,13 +33,19 @@ namespace TicketingSystem.API.Controllers
 
         //Get a List of Employees
         [HttpGet("employees")]
-        public async Task<IActionResult> GetEmployees()
-            => Ok(await _service.GetEmployeesAsync());
+        public async Task<IActionResult> GetEmployees([FromQuery] PaginationDto pagination)
+        {
+            var result = await _service.GetEmployeesAsync(pagination);
+            return Ok(result);
+        }
 
         // Get a list of client
         [HttpGet("clients")]
-        public async Task<IActionResult> GetClients()
-            => Ok(await _service.GetClientsAsync());
+        public async Task<IActionResult> GetClients([FromQuery] PaginationDto pagination)
+        {
+            var result = await _service.GetClientsAsync(pagination);
+            return Ok(result);
+        }
 
         //Get a client by Id
         [HttpGet("users/{id}")]
@@ -67,9 +74,10 @@ namespace TicketingSystem.API.Controllers
         // Get a List of Clients with their tickets
         [Authorize(Roles = "Manager")]
         [HttpGet("clients-with-tickets")]
-        public async Task<IActionResult> GetClientsWithTickets()
+        public async Task<IActionResult> GetClientsWithTickets([FromQuery] PaginationDto pagination)
         {
-            return Ok(await _service.GetClientsWithTicketsAsync());
+            var result = await _service.GetClientsWithTicketsAsync(pagination);
+            return Ok(result);
         }
 
         //Assign ticket to spec. employee
@@ -84,9 +92,12 @@ namespace TicketingSystem.API.Controllers
         // List all tickets with status / employees/ external clients 
         [Authorize(Roles = "Manager")]
         [HttpGet("all")]
-        public async Task<IActionResult> GetTickets([FromQuery] TicketFilterDto filter)
+        public async Task<IActionResult> GetTickets(
+            [FromQuery] TicketFilterDto filter,
+            [FromQuery] PaginationDto pagination)
         {
-            return Ok(await _ticketService.GetAllTicketsAsync(filter));
+            var result = await _ticketService.GetAllTicketsAsync(filter, pagination);
+            return Ok(result);
         }
 
         //view ticket information
