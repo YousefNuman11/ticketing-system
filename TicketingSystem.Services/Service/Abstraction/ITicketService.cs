@@ -1,4 +1,6 @@
-﻿using TicketingSystem.Services.DTOs.CommentDtos;
+﻿using Microsoft.AspNetCore.Http;
+using TicketingSystem.Services.DTOs.CommentDtos;
+using TicketingSystem.Services.DTOs.TicketAttachmentDto;
 using TicketingSystem.Services.DTOs.TicketDtos;
 
 namespace TicketingSystem.Services.Service.Abstraction
@@ -28,5 +30,7 @@ namespace TicketingSystem.Services.Service.Abstraction
         Task<List<TicketDto>> GetAllTicketsAsync(TicketFilterDto filter);
 
         Task<TicketDto?> GetTicketDetailsAsync(Guid ticketId);
+        Task<AttachmentDto> UploadAttachmentAsync(Guid ticketId,Guid userId,IFormFile file);
+        Task<List<AttachmentDto>> GetAttachmentsAsync(Guid ticketId);
     }
 }

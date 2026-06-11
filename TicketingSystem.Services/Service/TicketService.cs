@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
 using TicketingSystem.Services.DTOs.CommentDtos;
+using TicketingSystem.Services.DTOs.TicketAttachmentDto;
 using TicketingSystem.Services.DTOs.TicketDtos;
 using TicketingSystem.Services.Service.Abstraction;
 
@@ -215,6 +217,72 @@ namespace TicketingSystem.Services.Service
             var ticket = await _unitOfWork.Tickets.GetTicketWithDetailsAsync(ticketId);
 
             return ticket == null ? null : _mapper.Map<TicketDto>(ticket);
+        }
+
+       //UPLOAD ATTACHMENT
+        public async Task<AttachmentDto> UploadAttachmentAsync(
+            Guid ticketId,
+            Guid userId,
+            IFormFile file)
+        {
+            var ticket = await _unitOfWork.Tickets.GetByIdAsync(ticketId);
+
+            if (ticket == null)
+                throw new Exception("Ticket not found");
+
+            if (ticket.UserId != userId &&
+                ticket.AssignedEmployeeId != userId)
+            {
+                throw new Exception("Not allowed");
+            }
+
+            var uploadsFolder = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "Uploads");
+
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            var uniqueFileName =
+                $"{Guid.NewGuid()}_{file.FileName}";
+
+            var filePath = Path.Combine(
+                uploadsFolder,
+                uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var dto = new UploadAttachmentDto
+            {
+                FileName = file.FileName
+            };
+
+            var attachment = _mapper.Map<TicketAttachment>(dto);
+
+            attachment.Id = Guid.NewGuid();
+            attachment.TicketId = ticketId;
+            attachment.FileUrl = uniqueFileName;
+            attachment.CreatedAt = DateTime.UtcNow;
+
+            await _unitOfWork.TicketAttachments.AddAsync(attachment);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<AttachmentDto>(attachment);
+        }
+
+        // Get Attachment
+        public async Task<List<AttachmentDto>> GetAttachmentsAsync(
+            Guid ticketId)
+        {
+            var attachments = await _unitOfWork.TicketAttachments
+                .GetByTicketId(ticketId)
+                .ToListAsync();
+
+            return _mapper.Map<List<AttachmentDto>>(attachments);
         }
     }
 }

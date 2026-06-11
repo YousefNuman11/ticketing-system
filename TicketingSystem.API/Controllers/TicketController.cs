@@ -157,5 +157,29 @@ namespace TicketingSystem.API.Controllers
                 Message = "Ticket closed successfully"
             });
         }
+
+        //Get Attachment
+        [HttpGet("{ticketId}/attachments")]
+        public async Task<IActionResult> GetAttachments(
+            Guid ticketId)
+        {
+            return Ok(
+                await _ticketService.GetAttachmentsAsync(ticketId));
+        }
+
+        //Upload Attachment
+        [HttpPost("{ticketId}/attachments")]
+        public async Task<IActionResult> UploadAttachment(
+            Guid ticketId,
+            IFormFile file)
+        {
+            var userId = Guid.Parse(
+                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            var result = await _ticketService
+                .UploadAttachmentAsync(ticketId, userId, file);
+
+            return Ok(result);
+        }
     }
 }
