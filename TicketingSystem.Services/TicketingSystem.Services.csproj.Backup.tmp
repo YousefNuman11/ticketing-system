@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TicketingSystem.Repository\TicketingSystem.Repository.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\Tickets - Copy %282%29\Commands\" />
+    <Folder Include="Features\Tickets - Copy %282%29\Handlers\" />
+    <Folder Include="Features\Tickets - Copy %282%29\Queries\" />
+    <Folder Include="Features\Tickets - Copy %283%29\Commands\" />
+    <Folder Include="Features\Tickets - Copy %283%29\Handlers\" />
+    <Folder Include="Features\Tickets - Copy %283%29\Queries\" />
+    <Folder Include="Features\Tickets - Copy\Commands\" />
+    <Folder Include="Features\Tickets - Copy\Handlers\" />
+    <Folder Include="Features\Tickets - Copy\Queries\" />
+    <Folder Include="Features\Tickets\Commands\" />
+    <Folder Include="Features\Tickets\Handlers\" />
+    <Folder Include="Features\Tickets\Queries\" />
+  </ItemGroup>
+
+</Project>

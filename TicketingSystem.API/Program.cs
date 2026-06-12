@@ -7,6 +7,7 @@ using TicketingSystem.Repository.Data;
 using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.UnitOfWork;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
+using TicketingSystem.Services.Features.TicketMediator.Queries.Handler;
 using TicketingSystem.Services.Service;
 using TicketingSystem.Services.Service.Abstraction;
 using TicketingSystem.Services.Settings;
@@ -67,7 +68,12 @@ builder.Services
             };
     });
 
-
+//Mediator
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(
+        typeof(GetMyTicketsQueryHandler).Assembly);
+});
 
 var app = builder.Build();
 

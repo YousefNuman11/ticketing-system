@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TicketingSystem.API.Features.Manager.Commands.UpdateUser;
+using TicketingSystem.API.Features.Manager.Queries.GetAllTickets;
+using TicketingSystem.API.Features.Manager.Queries.GetClientsWithTickets;
 using TicketingSystem.Services.DTOs.TicketDtos;
 using TicketingSystem.Services.DTOs.User;
 using TicketingSystem.Services.Helpers;
-using TicketingSystem.Services.Service;
-using TicketingSystem.Services.Service.Abstraction;
 
 namespace TicketingSystem.API.Controllers
 {
@@ -13,21 +15,20 @@ namespace TicketingSystem.API.Controllers
     [Authorize(Roles = "Manager")]
     public class ManagerController : ControllerBase
     {
-        private readonly IManagerService _service;
-        private readonly ITicketService _ticketService;
+        private readonly IMediator _mediator;
 
-        public ManagerController(IManagerService service,
-            ITicketService ticketService)
+        public ManagerController(IMediator mediator)
         {
-            _service = service;
-            _ticketService = ticketService;
+            _mediator = mediator;
         }
 
         // Register Employee
         [HttpPost("employee")]
         public async Task<IActionResult> CreateEmployee(CreateEmployeeDto dto)
         {
-            var result = await _service.CreateEmployeeAsync(dto);
+            var result = await _mediator.Send(
+                new CreateEmployeeCommand(dto));
+
             return Ok(result);
         }
 
@@ -35,7 +36,8 @@ namespace TicketingSystem.API.Controllers
         [HttpGet("employees")]
         public async Task<IActionResult> GetEmployees([FromQuery] PaginationDto pagination)
         {
-            var result = await _service.GetEmployeesAsync(pagination);
+            var result = await _mediator.Send(
+                new GetEmployeesQuery(pagination));
             return Ok(result);
         }
 
@@ -43,7 +45,8 @@ namespace TicketingSystem.API.Controllers
         [HttpGet("clients")]
         public async Task<IActionResult> GetClients([FromQuery] PaginationDto pagination)
         {
-            var result = await _service.GetClientsAsync(pagination);
+            var result = await _mediator.Send(
+                new GetClientsQuery(pagination));
             return Ok(result);
         }
 
@@ -51,7 +54,8 @@ namespace TicketingSystem.API.Controllers
         [HttpGet("users/{id}")]
         public async Task<IActionResult> GetUser(Guid id)
         {
-            var user = await _service.GetUserByIdAsync(id);
+            var user = await _mediator.Send(
+               new GetUserByIdQuery(id));
             return user == null ? NotFound() : Ok(user);
         }
 
@@ -59,7 +63,8 @@ namespace TicketingSystem.API.Controllers
         [HttpPut("users/{id}/toggle-status")]
         public async Task<IActionResult> Toggle(Guid id)
         {
-            var user = await _service.ToggleUserStatusAsync(id);
+            var user = await _mediator.Send(
+                new ToggleUserStatusCommand(id));
             return user == null ? NotFound() : Ok(user);
         }
 
@@ -67,7 +72,10 @@ namespace TicketingSystem.API.Controllers
         [HttpPut("users/{id}")]
         public async Task<IActionResult> Update(Guid id, UpdateUserDto dto)
         {
-            var user = await _service.UpdateUserAsync(id, dto);
+            var user = await _mediator.Send(
+               new UpdateUserCommand(
+                    id,
+                    dto));
             return user == null ? NotFound() : Ok(user);
         }
 
@@ -76,7 +84,8 @@ namespace TicketingSystem.API.Controllers
         [HttpGet("clients-with-tickets")]
         public async Task<IActionResult> GetClientsWithTickets([FromQuery] PaginationDto pagination)
         {
-            var result = await _service.GetClientsWithTicketsAsync(pagination);
+            var result = await _mediator.Send(
+                new GetClientsWithTicketsQuery(pagination));
             return Ok(result);
         }
 
@@ -85,7 +94,10 @@ namespace TicketingSystem.API.Controllers
         [HttpPut("{ticketId}/assign/{employeeId}")]
         public async Task<IActionResult> Assign(Guid ticketId, Guid employeeId)
         {
-            await _ticketService.AssignTicketAsync(ticketId, employeeId);
+            await _mediator.Send(
+                new AssignTicketCommand(
+                    ticketId,
+                    employeeId));
             return Ok(new { message = "Ticket assigned successfully" });
         }
 
@@ -96,7 +108,10 @@ namespace TicketingSystem.API.Controllers
             [FromQuery] TicketFilterDto filter,
             [FromQuery] PaginationDto pagination)
         {
-            var result = await _ticketService.GetAllTicketsAsync(filter, pagination);
+            var result = await _mediator.Send(
+                new GetAllTicketsQuery(
+                    filter,
+                    pagination));
             return Ok(result);
         }
 
@@ -105,7 +120,8 @@ namespace TicketingSystem.API.Controllers
         [HttpGet("info/{id}")]
         public async Task<IActionResult> GetTicket(Guid id)
         {
-            return Ok(await _ticketService.GetTicketDetailsAsync(id));
+            return Ok(await _mediator.Send(
+                new GetTicketDetailsQuery(id)));
         }
     }
 }

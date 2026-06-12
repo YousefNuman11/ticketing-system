@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using TicketingSystem.API.Features.Tickets.Commands.CreateTicket;
+using TicketingSystem.API.Features.Tickets.Queries.GetMyTickets;
 using TicketingSystem.Services.DTOs.CommentDtos;
 using TicketingSystem.Services.DTOs.TicketDtos;
 using TicketingSystem.Services.Helpers;
@@ -12,12 +15,11 @@ namespace TicketingSystem.API.Controllers
     [Route("api/[controller]")]
     public class TicketController : ControllerBase
     {
-        private readonly ITicketService _ticketService;
+        private readonly IMediator _mediator;
 
-        public TicketController(
-            ITicketService ticketService)
+        public TicketController(IMediator mediator)
         {
-            _ticketService = ticketService;
+            _mediator = mediator;
         }
 
         //List of all tickets related to a spec. client
@@ -27,8 +29,8 @@ namespace TicketingSystem.API.Controllers
         {
             var clientId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var result = await _ticketService.GetMyTicketsAsync(clientId, pagination);
-
+            var result = await _mediator.Send(
+                new GetMyTicketsQuery(clientId, pagination));
             return Ok(result);
         }
 
@@ -38,7 +40,10 @@ namespace TicketingSystem.API.Controllers
             var clientId = Guid.Parse(
                 User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var result = await _ticketService.GetTicketByIdAsync(id, clientId);
+            var result = await _mediator.Send(
+                new GetTicketByIdQuery(
+                    id,
+                    clientId));
 
             if (result == null)
                 return NotFound();
@@ -53,13 +58,10 @@ namespace TicketingSystem.API.Controllers
            [FromBody] CreateTicketDto dto)
         {
             var userId = Guid.Parse(
-                User.FindFirst(ClaimTypes.NameIdentifier)!
-                    .Value);
+                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var result =
-                await _ticketService.CreateTicketAsync(
-                    dto,
-                    userId);
+            var result = await _mediator.Send(
+                new CreateTicketCommand(dto, userId));
 
             return Ok(result);
         }
@@ -74,10 +76,11 @@ namespace TicketingSystem.API.Controllers
             var clientId = Guid.Parse(
                 User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var result = await _ticketService.UpdateTicketAsync(
-                ticketId,
-                clientId,
-                dto);
+            var result = await _mediator.Send(
+                new UpdateTicketCommand(
+                    ticketId,
+                    clientId,
+                    dto));
 
             return result == null
                 ? NotFound()
@@ -91,8 +94,10 @@ namespace TicketingSystem.API.Controllers
         {
             var employeeId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var result = await _ticketService.GetMyAssignedTicketsAsync(employeeId, pagination);
-
+            var result = await _mediator.Send(
+                new GetMyAssignedTicketsQuery(
+                    employeeId,
+                    pagination));
             return Ok(result);
         }
 
@@ -102,7 +107,10 @@ namespace TicketingSystem.API.Controllers
             Guid ticketId,
             [FromQuery] PaginationDto pagination)
         {
-            var result = await _ticketService.GetCommentsAsync(ticketId, pagination);
+            var result = await _mediator.Send(
+                new GetCommentsQuery(
+                    ticketId,
+                    pagination));
 
             return Ok(result);
         }
@@ -117,10 +125,11 @@ namespace TicketingSystem.API.Controllers
             var userId = Guid.Parse(
                 User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var result = await _ticketService.AddCommentAsync(
-                ticketId,
-                userId,
-                dto);
+            var result = await _mediator.Send(
+               new AddCommentCommand(
+                   ticketId,
+                   userId,
+                   dto));
 
             return Ok(result);
         }
@@ -133,9 +142,10 @@ namespace TicketingSystem.API.Controllers
             var employeeId = Guid.Parse(
                 User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            await _ticketService.ResolveTicketAsync(
-                ticketId,
-                employeeId);
+            await _mediator.Send(
+                new ResolveTicketCommand(
+                    ticketId,
+                    employeeId));
 
             return Ok(new
             {
@@ -151,9 +161,10 @@ namespace TicketingSystem.API.Controllers
             var clientId = Guid.Parse(
                 User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            await _ticketService.CloseTicketAsync(
-                ticketId,
-                clientId);
+            await _mediator.Send(
+                 new CloseTicketCommand(
+                     ticketId,
+                     clientId));
 
             return Ok(new
             {
@@ -167,7 +178,8 @@ namespace TicketingSystem.API.Controllers
             Guid ticketId,
             [FromQuery] PaginationDto pagination)
         {
-            var result = await _ticketService.GetAttachmentsAsync(ticketId, pagination);
+            var result = await _mediator.Send(
+                new GetAttachmentsQuery(ticketId, pagination));
 
             return Ok(result);
         }
@@ -181,8 +193,11 @@ namespace TicketingSystem.API.Controllers
             var userId = Guid.Parse(
                 User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var result = await _ticketService
-                .UploadAttachmentAsync(ticketId, userId, file);
+            var result = await _mediator.Send(
+            new UploadAttachmentCommand(
+                ticketId,
+                userId,
+                file));
 
             return Ok(result);
         }

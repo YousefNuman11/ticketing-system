@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TicketingSystem.API.Features.Dashboard.Queries.GetTicketStatus;
+using TicketingSystem.API.Features.Dashboard.Queries.GetTicketTrend;
+using TicketingSystem.API.Features.Dashboard.Queries.GetTopEmployees;
 using TicketingSystem.Services.Service.Abstraction;
 
 namespace TicketingSystem.API.Controllers
@@ -9,23 +13,26 @@ namespace TicketingSystem.API.Controllers
     [Authorize(Roles = "Manager")]
     public class DashboardController : ControllerBase
     {
-        private readonly IDashboardService _service;
+        private readonly IMediator _mediator;
 
-        public DashboardController(IDashboardService service)
+        public DashboardController(IMediator mediator)
         {
-            _service = service;
+            _mediator = mediator;
         }
 
         [HttpGet("status")]
         public async Task<IActionResult> Status()
-            => Ok(await _service.GetTicketStatusAsync());
+            => Ok(await _mediator.Send(
+                new GetTicketStatusQuery()));
 
         [HttpGet("top-employees")]
         public async Task<IActionResult> TopEmployees()
-            => Ok(await _service.GetTopEmployeesAsync());
+            => Ok(await _mediator.Send(
+                new GetTopEmployeesQuery()));
 
         [HttpGet("trend")]
         public async Task<IActionResult> Trend()
-            => Ok(await _service.GetTicketTrendAsync());
+            => Ok(await _mediator.Send(
+                new GetTicketTrendQuery()));
     }
 }
