@@ -1,10 +1,7 @@
-﻿using MediatR;
-using TicketingSystem.Services.DTOs.User;
+using MediatR;
+using TicketingSystem.Services.Features.ManagerMediator.Contracts;
 
-namespace TicketingSystem.API.Features.Manager.Commands.UpdateUser
+namespace TicketingSystem.Services.Features.ManagerMediator.Commands
 {
-    public record UpdateUserCommand(
-        Guid Id,
-        UpdateUserDto Dto
-    ) : IRequest<UserDto?>;
+    public record UpdateUserCommand(Guid Id, UpdateUserDto Dto) : IRequest<UserDto?>;
 }

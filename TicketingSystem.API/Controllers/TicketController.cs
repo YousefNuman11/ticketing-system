@@ -1,13 +1,11 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using TicketingSystem.API.Features.Tickets.Commands.CreateTicket;
-using TicketingSystem.API.Features.Tickets.Queries.GetMyTickets;
-using TicketingSystem.Services.DTOs.CommentDtos;
-using TicketingSystem.Services.DTOs.TicketDtos;
+using TicketingSystem.Services.Features.TicketMediator.Commands;
+using TicketingSystem.Services.Features.TicketMediator.Contracts;
+using TicketingSystem.Services.Features.TicketMediator.Queries;
 using TicketingSystem.Services.Helpers;
-using TicketingSystem.Services.Service.Abstraction;
 
 namespace TicketingSystem.API.Controllers
 {
@@ -22,183 +20,111 @@ namespace TicketingSystem.API.Controllers
             _mediator = mediator;
         }
 
-        //List of all tickets related to a spec. client
+        private Guid CurrentUserId =>
+            Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        // All tickets for the current client
         [Authorize(Roles = "Client")]
         [HttpGet("myTickets")]
         public async Task<IActionResult> GetMyTickets([FromQuery] PaginationDto pagination)
         {
-            var clientId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
             var result = await _mediator.Send(
-                new GetMyTicketsQuery(clientId, pagination));
+                new GetMyTicketsQuery(CurrentUserId, pagination));
             return Ok(result);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var clientId = Guid.Parse(
-                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
             var result = await _mediator.Send(
-                new GetTicketByIdQuery(
-                    id,
-                    clientId));
+                new GetTicketByIdQuery(id, CurrentUserId));
 
-            if (result == null)
-                return NotFound();
-
-            return Ok(result);
+            return result == null ? NotFound() : Ok(result);
         }
 
-        //Client can add new ticket
+        // Client creates a new ticket
         [HttpPost]
         [Authorize(Roles = "Client")]
-        public async Task<IActionResult> CreateTicket(
-           [FromBody] CreateTicketDto dto)
+        public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDto dto)
         {
-            var userId = Guid.Parse(
-                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
             var result = await _mediator.Send(
-                new CreateTicketCommand(dto, userId));
-
+                new CreateTicketCommand(dto, CurrentUserId));
             return Ok(result);
         }
 
-        //Modify a ticket if its status is Open
+        // Modify a ticket while its status is still New
         [Authorize(Roles = "Client")]
         [HttpPut("{ticketId}")]
-        public async Task<IActionResult> UpdateTicket(
-            Guid ticketId,
-            UpdateTicketDto dto)
+        public async Task<IActionResult> UpdateTicket(Guid ticketId, UpdateTicketDto dto)
         {
-            var clientId = Guid.Parse(
-                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
             var result = await _mediator.Send(
-                new UpdateTicketCommand(
-                    ticketId,
-                    clientId,
-                    dto));
+                new UpdateTicketCommand(ticketId, CurrentUserId, dto));
 
-            return result == null
-                ? NotFound()
-                : Ok(result);
+            return result == null ? NotFound() : Ok(result);
         }
 
-        // Employees will see a list of assigned tickets
+        // Employees see the tickets assigned to them
         [Authorize(Roles = "Employee")]
         [HttpGet("assigned")]
         public async Task<IActionResult> GetAssignedTickets([FromQuery] PaginationDto pagination)
         {
-            var employeeId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
             var result = await _mediator.Send(
-                new GetMyAssignedTicketsQuery(
-                    employeeId,
-                    pagination));
+                new GetMyAssignedTicketsQuery(CurrentUserId, pagination));
             return Ok(result);
         }
 
-        // Get comments for spec. ticket
+        // Comments for a specific ticket
         [HttpGet("{ticketId}/comments")]
-        public async Task<IActionResult> GetComments(
-            Guid ticketId,
-            [FromQuery] PaginationDto pagination)
+        public async Task<IActionResult> GetComments(Guid ticketId, [FromQuery] PaginationDto pagination)
         {
             var result = await _mediator.Send(
-                new GetCommentsQuery(
-                    ticketId,
-                    pagination));
-
+                new GetCommentsQuery(ticketId, pagination));
             return Ok(result);
         }
 
-        //The client and employee can see the comments and reply to each other
+        // Client and employee reply to each other
         [Authorize(Roles = "Client,Employee")]
         [HttpPost("{ticketId}/comments")]
-        public async Task<IActionResult> AddComment(
-            Guid ticketId,
-            [FromBody] AddCommentDto dto)
+        public async Task<IActionResult> AddComment(Guid ticketId, [FromBody] AddCommentDto dto)
         {
-            var userId = Guid.Parse(
-                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
             var result = await _mediator.Send(
-               new AddCommentCommand(
-                   ticketId,
-                   userId,
-                   dto));
-
+                new AddCommentCommand(ticketId, CurrentUserId, dto));
             return Ok(result);
         }
 
-        //The employee will resolve the ticket.
+        // Employee resolves the ticket
         [Authorize(Roles = "Employee")]
         [HttpPut("{ticketId}/resolve")]
         public async Task<IActionResult> ResolveTicket(Guid ticketId)
         {
-            var employeeId = Guid.Parse(
-                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-            await _mediator.Send(
-                new ResolveTicketCommand(
-                    ticketId,
-                    employeeId));
-
-            return Ok(new
-            {
-                Message = "Ticket resolved successfully"
-            });
+            await _mediator.Send(new ResolveTicketCommand(ticketId, CurrentUserId));
+            return Ok(new { Message = "Ticket resolved successfully" });
         }
 
-        //The client can close it if everything is ok.
+        // Client closes the ticket once satisfied
         [Authorize(Roles = "Client")]
         [HttpPut("{ticketId}/close")]
         public async Task<IActionResult> CloseTicket(Guid ticketId)
         {
-            var clientId = Guid.Parse(
-                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-            await _mediator.Send(
-                 new CloseTicketCommand(
-                     ticketId,
-                     clientId));
-
-            return Ok(new
-            {
-                Message = "Ticket closed successfully"
-            });
+            await _mediator.Send(new CloseTicketCommand(ticketId, CurrentUserId));
+            return Ok(new { Message = "Ticket closed successfully" });
         }
 
-        //Get Attachment
+        // Attachments for a ticket
         [HttpGet("{ticketId}/attachments")]
-        public async Task<IActionResult> GetAttachments(
-            Guid ticketId,
-            [FromQuery] PaginationDto pagination)
+        public async Task<IActionResult> GetAttachments(Guid ticketId, [FromQuery] PaginationDto pagination)
         {
             var result = await _mediator.Send(
                 new GetAttachmentsQuery(ticketId, pagination));
-
             return Ok(result);
         }
 
-        //Upload Attachment
+        // Upload an attachment
         [HttpPost("{ticketId}/attachments")]
-        public async Task<IActionResult> UploadAttachment(
-            Guid ticketId,
-            IFormFile file)
+        public async Task<IActionResult> UploadAttachment(Guid ticketId, IFormFile file)
         {
-            var userId = Guid.Parse(
-                User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
             var result = await _mediator.Send(
-            new UploadAttachmentCommand(
-                ticketId,
-                userId,
-                file));
-
+                new UploadAttachmentCommand(ticketId, CurrentUserId, file));
             return Ok(result);
         }
     }

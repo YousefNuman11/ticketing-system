@@ -1,38 +1,38 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MediatR;
 using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
-using TicketingSystem.Services.DTOs.User;
+using TicketingSystem.Services.Features.ManagerMediator.Contracts;
 
-public class CreateEmployeeCommandHandler
-    : IRequestHandler<CreateEmployeeCommand, UserDto>
+namespace TicketingSystem.Services.Features.ManagerMediator.Commands
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-
-    public CreateEmployeeCommandHandler(
-        IUnitOfWork unitOfWork,
-        IMapper mapper)
+    public class CreateEmployeeCommandHandler
+        : IRequestHandler<CreateEmployeeCommand, UserDto>
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-    public async Task<UserDto> Handle(
-        CreateEmployeeCommand request,
-        CancellationToken cancellationToken)
-    {
-        var user = _mapper.Map<User>(request.Dto);
+        public CreateEmployeeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
 
-        user.Id = Guid.NewGuid();
-        user.Role = UserRole.Employee;
-        user.IsActive = true;
-        user.PasswordHash =
-            BCrypt.Net.BCrypt.HashPassword(request.Dto.Password);
+        public async Task<UserDto> Handle(
+            CreateEmployeeCommand request,
+            CancellationToken cancellationToken)
+        {
+            var user = _mapper.Map<User>(request.Dto);
 
-        await _unitOfWork.Users.AddAsync(user);
-        await _unitOfWork.SaveChangesAsync();
+            user.Id = Guid.NewGuid();
+            user.Role = UserRole.Employee;
+            user.IsActive = true;
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Dto.Password);
 
-        return _mapper.Map<UserDto>(user);
+            await _unitOfWork.Users.AddAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<UserDto>(user);
+        }
     }
 }

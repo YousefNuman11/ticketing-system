@@ -1,24 +1,28 @@
-﻿using MediatR;
-using TicketingSystem.Services.Service.Abstraction;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using TicketingSystem.Repository.Specifications.DashBoard;
+using TicketingSystem.Repository.Specifications.Dashboard;
+using TicketingSystem.Repository.UnitOfWork.Abstraction;
 
-namespace TicketingSystem.API.Features.Dashboard.Queries.GetTicketTrend
+namespace TicketingSystem.Services.Features.DashboardMediator.Queries
 {
     public class GetTicketTrendQueryHandler
         : IRequestHandler<GetTicketTrendQuery, object>
     {
-        private readonly IDashboardService _dashboardService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GetTicketTrendQueryHandler(
-            IDashboardService dashboardService)
+        public GetTicketTrendQueryHandler(IUnitOfWork unitOfWork)
         {
-            _dashboardService = dashboardService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<object> Handle(
             GetTicketTrendQuery request,
             CancellationToken cancellationToken)
         {
-            return await _dashboardService.GetTicketTrendAsync();
+            var query = _unitOfWork.Tickets.Query(new AllTicketsSpec());
+
+            return await TicketTrendSpec.Apply(query).ToListAsync(cancellationToken);
         }
     }
 }

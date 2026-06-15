@@ -1,28 +1,36 @@
-﻿using MediatR;
-using TicketingSystem.Services.DTOs.User;
-using TicketingSystem.Services.Service.Abstraction;
+using AutoMapper;
+using MediatR;
+using TicketingSystem.Repository.UnitOfWork.Abstraction;
+using TicketingSystem.Services.Features.ManagerMediator.Contracts;
 
-namespace TicketingSystem.API.Features.Manager.Commands.UpdateUser
+namespace TicketingSystem.Services.Features.ManagerMediator.Commands
 {
     public class UpdateUserCommandHandler
         : IRequestHandler<UpdateUserCommand, UserDto?>
     {
-        private readonly IManagerService _managerService;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public UpdateUserCommandHandler(
-            IManagerService managerService)
+        public UpdateUserCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _managerService = managerService;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<UserDto?> Handle(
             UpdateUserCommand request,
             CancellationToken cancellationToken)
         {
-            return await _managerService
-                .UpdateUserAsync(
-                    request.Id,
-                    request.Dto);
+            var user = await _unitOfWork.Users.GetByIdAsync(request.Id);
+
+            if (user == null)
+                return null;
+
+            _mapper.Map(request.Dto, user);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<UserDto>(user);
         }
     }
 }

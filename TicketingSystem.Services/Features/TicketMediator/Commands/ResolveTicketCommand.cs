@@ -1,6 +1,6 @@
-﻿using MediatR;
+using MediatR;
 
-public record ResolveTicketCommand(
-    Guid TicketId,
-    Guid EmployeeId
-) : IRequest;
+namespace TicketingSystem.Services.Features.TicketMediator.Commands
+{
+    public record ResolveTicketCommand(Guid TicketId, Guid EmployeeId) : IRequest;
+}

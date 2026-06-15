@@ -1,28 +1,35 @@
-﻿using MediatR;
-using TicketingSystem.Services.DTOs.UserDtos;
+using AutoMapper;
+using MediatR;
+using TicketingSystem.Repository.Models;
+using TicketingSystem.Repository.Specifications.Users;
+using TicketingSystem.Repository.UnitOfWork.Abstraction;
+using TicketingSystem.Services.Features.ManagerMediator.Contracts;
 using TicketingSystem.Services.Helpers;
-using TicketingSystem.Services.Service.Abstraction;
 
-namespace TicketingSystem.API.Features.Manager.Queries.GetClientsWithTickets
+namespace TicketingSystem.Services.Features.ManagerMediator.Queries
 {
     public class GetClientsWithTicketsQueryHandler
-        : IRequestHandler<GetClientsWithTicketsQuery,
-            PagedResult<ClientWithTicketsDto>>
+        : IRequestHandler<GetClientsWithTicketsQuery, PagedResult<ClientWithTicketsDto>>
     {
-        private readonly IManagerService _managerService;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public GetClientsWithTicketsQueryHandler(
-            IManagerService managerService)
+        public GetClientsWithTicketsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _managerService = managerService;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<PagedResult<ClientWithTicketsDto>> Handle(
             GetClientsWithTicketsQuery request,
             CancellationToken cancellationToken)
         {
-            return await _managerService
-                .GetClientsWithTicketsAsync(request.Pagination);
+            var spec = new ClientsSpec();
+
+            var query = _unitOfWork.Users.Query(spec);
+
+            return await PaginationHelper
+                .ToPagedResultAsync<User, ClientWithTicketsDto>(query, request.Pagination, _mapper);
         }
     }
 }

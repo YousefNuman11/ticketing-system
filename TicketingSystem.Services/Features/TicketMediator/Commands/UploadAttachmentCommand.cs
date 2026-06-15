@@ -1,9 +1,9 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.AspNetCore.Http;
-using TicketingSystem.Services.DTOs.TicketAttachmentDto;
+using TicketingSystem.Services.Features.TicketMediator.Contracts;
 
-public record UploadAttachmentCommand(
-    Guid TicketId,
-    Guid UserId,
-    IFormFile File
-) : IRequest<AttachmentDto>;
+namespace TicketingSystem.Services.Features.TicketMediator.Commands
+{
+    public record UploadAttachmentCommand(Guid TicketId, Guid UserId, IFormFile File)
+        : IRequest<AttachmentDto>;
+}

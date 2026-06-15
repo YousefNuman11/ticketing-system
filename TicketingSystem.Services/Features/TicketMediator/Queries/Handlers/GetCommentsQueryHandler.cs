@@ -1,35 +1,32 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MediatR;
+using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
-using TicketingSystem.Services.DTOs.CommentDtos;
+using TicketingSystem.Services.Features.TicketMediator.Contracts;
 using TicketingSystem.Services.Helpers;
 
-public class GetCommentsQueryHandler
-    : IRequestHandler<GetCommentsQuery,
-        PagedResult<CommentDto>>
+namespace TicketingSystem.Services.Features.TicketMediator.Queries
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-
-    public GetCommentsQueryHandler(
-        IUnitOfWork unitOfWork,
-        IMapper mapper)
+    public class GetCommentsQueryHandler
+        : IRequestHandler<GetCommentsQuery, PagedResult<CommentDto>>
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-    public async Task<PagedResult<CommentDto>> Handle(
-        GetCommentsQuery request,
-        CancellationToken cancellationToken)
-    {
-        var query = _unitOfWork.TicketsComments
-            .GetByTicketId(request.TicketId);
+        public GetCommentsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
 
-        return await PaginationHelper
-            .ToPagedResultAsync<TicketsComment, CommentDto>(
-                query,
-                request.Pagination,
-                _mapper);
+        public async Task<PagedResult<CommentDto>> Handle(
+            GetCommentsQuery request,
+            CancellationToken cancellationToken)
+        {
+            var query = _unitOfWork.TicketsComments.GetByTicketId(request.TicketId);
+
+            return await PaginationHelper
+                .ToPagedResultAsync<TicketsComment, CommentDto>(query, request.Pagination, _mapper);
+        }
     }
 }

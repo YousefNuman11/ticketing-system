@@ -1,36 +1,38 @@
-﻿using MediatR;
+using MediatR;
 using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
+using TicketingSystem.Services.Exceptions;
 
-public class CloseTicketCommandHandler
-    : IRequestHandler<CloseTicketCommand>
+namespace TicketingSystem.Services.Features.TicketMediator.Commands
 {
-    private readonly IUnitOfWork _unitOfWork;
-
-    public CloseTicketCommandHandler(
-        IUnitOfWork unitOfWork)
+    public class CloseTicketCommandHandler
+        : IRequestHandler<CloseTicketCommand>
     {
-        _unitOfWork = unitOfWork;
-    }
+        private readonly IUnitOfWork _unitOfWork;
 
-    public async Task Handle(
-        CloseTicketCommand request,
-        CancellationToken cancellationToken)
-    {
-        var ticket = await _unitOfWork.Tickets
-            .GetByIdAsync(request.TicketId);
+        public CloseTicketCommandHandler(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
 
-        if (ticket == null)
-            throw new Exception("Ticket not found");
+        public async Task Handle(
+            CloseTicketCommand request,
+            CancellationToken cancellationToken)
+        {
+            var ticket = await _unitOfWork.Tickets.GetByIdAsync(request.TicketId);
 
-        if (ticket.UserId != request.ClientId)
-            throw new Exception("Not your ticket");
+            if (ticket == null)
+                throw new NotFoundException("Ticket not found");
 
-        if (ticket.Status != TicketStatus.Resolved)
-            throw new Exception("Must be resolved first");
+            if (ticket.UserId != request.ClientId)
+                throw new ForbiddenException("Not your ticket");
 
-        ticket.Status = TicketStatus.Closed;
+            if (ticket.Status != TicketStatus.Resolved)
+                throw new ValidationException("Must be resolved first");
 
-        await _unitOfWork.SaveChangesAsync();
+            ticket.Status = TicketStatus.Closed;
+
+            await _unitOfWork.SaveChangesAsync();
+        }
     }
 }

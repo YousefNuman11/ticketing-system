@@ -1,9 +1,6 @@
-﻿using MediatR;
+using MediatR;
 
-namespace TicketingSystem.API.Features.Manager.Commands.AssignTicket
+namespace TicketingSystem.Services.Features.ManagerMediator.Commands
 {
-    public record AssignTicketCommand(
-        Guid TicketId,
-        Guid EmployeeId
-    ) : IRequest<Unit>;
+    public record AssignTicketCommand(Guid TicketId, Guid EmployeeId) : IRequest;
 }

@@ -1,33 +1,32 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
-using TicketingSystem.Services.DTOs.TicketDtos;
+using TicketingSystem.Services.Features.TicketMediator.Contracts;
 
-public class GetTicketByIdQueryHandler
-    : IRequestHandler<GetTicketByIdQuery, TicketDto?>
+namespace TicketingSystem.Services.Features.TicketMediator.Queries
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-
-    public GetTicketByIdQueryHandler(
-        IUnitOfWork unitOfWork,
-        IMapper mapper)
+    public class GetTicketByIdQueryHandler
+        : IRequestHandler<GetTicketByIdQuery, TicketDto?>
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-    public async Task<TicketDto?> Handle(
-        GetTicketByIdQuery request,
-        CancellationToken cancellationToken)
-    {
-        var ticket = await _unitOfWork.Tickets
-            .GetByUserId(request.ClientId)
-            .FirstOrDefaultAsync(t => t.Id == request.TicketId);
+        public GetTicketByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
 
-        return ticket == null
-            ? null
-            : _mapper.Map<TicketDto>(ticket);
+        public async Task<TicketDto?> Handle(
+            GetTicketByIdQuery request,
+            CancellationToken cancellationToken)
+        {
+            var ticket = await _unitOfWork.Tickets
+                .GetByUserId(request.ClientId)
+                .FirstOrDefaultAsync(t => t.Id == request.TicketId, cancellationToken);
+
+            return ticket == null ? null : _mapper.Map<TicketDto>(ticket);
+        }
     }
 }

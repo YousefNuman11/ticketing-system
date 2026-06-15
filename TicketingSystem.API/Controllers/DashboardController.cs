@@ -1,10 +1,7 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TicketingSystem.API.Features.Dashboard.Queries.GetTicketStatus;
-using TicketingSystem.API.Features.Dashboard.Queries.GetTicketTrend;
-using TicketingSystem.API.Features.Dashboard.Queries.GetTopEmployees;
-using TicketingSystem.Services.Service.Abstraction;
+using TicketingSystem.Services.Features.DashboardMediator.Queries;
 
 namespace TicketingSystem.API.Controllers
 {
@@ -22,17 +19,14 @@ namespace TicketingSystem.API.Controllers
 
         [HttpGet("status")]
         public async Task<IActionResult> Status()
-            => Ok(await _mediator.Send(
-                new GetTicketStatusQuery()));
+            => Ok(await _mediator.Send(new GetTicketStatusQuery()));
 
         [HttpGet("top-employees")]
         public async Task<IActionResult> TopEmployees()
-            => Ok(await _mediator.Send(
-                new GetTopEmployeesQuery()));
+            => Ok(await _mediator.Send(new GetTopEmployeesQuery()));
 
         [HttpGet("trend")]
         public async Task<IActionResult> Trend()
-            => Ok(await _mediator.Send(
-                new GetTicketTrendQuery()));
+            => Ok(await _mediator.Send(new GetTicketTrendQuery()));
     }
 }

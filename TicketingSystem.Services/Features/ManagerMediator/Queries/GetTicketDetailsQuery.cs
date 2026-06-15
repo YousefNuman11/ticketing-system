@@ -1,9 +1,7 @@
-﻿using MediatR;
-using TicketingSystem.Services.DTOs.TicketDtos;
+using MediatR;
+using TicketingSystem.Services.Features.TicketMediator.Contracts;
 
-namespace TicketingSystem.API.Features.Manager.Queries.GetTicketDetails
+namespace TicketingSystem.Services.Features.ManagerMediator.Queries
 {
-    public record GetTicketDetailsQuery(
-        Guid TicketId
-    ) : IRequest<TicketDto?>;
+    public record GetTicketDetailsQuery(Guid TicketId) : IRequest<TicketDto?>;
 }

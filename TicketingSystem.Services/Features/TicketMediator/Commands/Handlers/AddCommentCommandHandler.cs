@@ -1,52 +1,50 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MediatR;
 using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
-using TicketingSystem.Services.DTOs.CommentDtos;
+using TicketingSystem.Services.Features.TicketMediator.Contracts;
+using TicketingSystem.Services.Exceptions;
 
-public class AddCommentCommandHandler
-    : IRequestHandler<AddCommentCommand, CommentDto>
+namespace TicketingSystem.Services.Features.TicketMediator.Commands
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-
-    public AddCommentCommandHandler(
-        IUnitOfWork unitOfWork,
-        IMapper mapper)
+    public class AddCommentCommandHandler
+        : IRequestHandler<AddCommentCommand, CommentDto>
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-    public async Task<CommentDto> Handle(
-        AddCommentCommand request,
-        CancellationToken cancellationToken)
-    {
-        var ticket = await _unitOfWork.Tickets
-            .GetByIdAsync(request.TicketId);
-
-        if (ticket == null)
-            throw new Exception("Ticket not found");
-
-        if (ticket.UserId != request.UserId &&
-            ticket.AssignedEmployeeId != request.UserId)
+        public AddCommentCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            throw new Exception("Not allowed");
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        var comment = _mapper.Map<TicketsComment>(
-            request.Dto);
+        public async Task<CommentDto> Handle(
+            AddCommentCommand request,
+            CancellationToken cancellationToken)
+        {
+            var ticket = await _unitOfWork.Tickets.GetByIdAsync(request.TicketId);
 
-        comment.Id = Guid.NewGuid();
-        comment.TicketId = request.TicketId;
-        comment.UserId = request.UserId;
-        comment.CreatedAt = DateTime.UtcNow;
+            if (ticket == null)
+                throw new NotFoundException("Ticket not found");
 
-        await _unitOfWork.TicketsComments
-            .AddAsync(comment);
+            if (ticket.UserId != request.UserId &&
+                ticket.AssignedEmployeeId != request.UserId)
+            {
+                throw new ForbiddenException("Not allowed");
+            }
 
-        await _unitOfWork.SaveChangesAsync();
+            var comment = _mapper.Map<TicketsComment>(request.Dto);
 
-        return _mapper.Map<CommentDto>(comment);
+            comment.Id = Guid.NewGuid();
+            comment.TicketId = request.TicketId;
+            comment.UserId = request.UserId;
+            comment.CreatedAt = DateTime.UtcNow;
+
+            await _unitOfWork.TicketsComments.AddAsync(comment);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<CommentDto>(comment);
+        }
     }
 }

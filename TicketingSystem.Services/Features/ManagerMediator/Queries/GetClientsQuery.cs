@@ -1,7 +1,9 @@
-﻿using MediatR;
-using TicketingSystem.Services.DTOs.User;
+using MediatR;
+using TicketingSystem.Services.Features.ManagerMediator.Contracts;
 using TicketingSystem.Services.Helpers;
 
-public record GetClientsQuery(
-    PaginationDto Pagination
-) : IRequest<PagedResult<UserDto>>;
+namespace TicketingSystem.Services.Features.ManagerMediator.Queries
+{
+    public record GetClientsQuery(PaginationDto Pagination)
+        : IRequest<PagedResult<UserDto>>;
+}

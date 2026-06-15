@@ -1,26 +1,34 @@
-﻿using MediatR;
-using TicketingSystem.Services.DTOs.TicketDtos;
-using TicketingSystem.Services.Service.Abstraction;
+using AutoMapper;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using TicketingSystem.Repository.Specifications;
+using TicketingSystem.Repository.UnitOfWork.Abstraction;
+using TicketingSystem.Services.Features.TicketMediator.Contracts;
 
-namespace TicketingSystem.API.Features.Manager.Queries.GetTicketDetails
+namespace TicketingSystem.Services.Features.ManagerMediator.Queries
 {
     public class GetTicketDetailsQueryHandler
         : IRequestHandler<GetTicketDetailsQuery, TicketDto?>
     {
-        private readonly ITicketService _ticketService;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public GetTicketDetailsQueryHandler(
-            ITicketService ticketService)
+        public GetTicketDetailsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _ticketService = ticketService;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<TicketDto?> Handle(
             GetTicketDetailsQuery request,
             CancellationToken cancellationToken)
         {
-            return await _ticketService
-                .GetTicketDetailsAsync(request.TicketId);
+            var spec = new TicketDetailsSpec(request.TicketId);
+
+            var ticket = await _unitOfWork.Tickets.Query(spec)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            return ticket == null ? null : _mapper.Map<TicketDto>(ticket);
         }
     }
 }

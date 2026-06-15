@@ -1,49 +1,49 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MediatR;
 using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
-using TicketingSystem.Services.DTOs.TicketDtos;
+using TicketingSystem.Services.Features.TicketMediator.Contracts;
+using TicketingSystem.Services.Exceptions;
 
-public class UpdateTicketCommandHandler
-    : IRequestHandler<UpdateTicketCommand, TicketDto?>
+namespace TicketingSystem.Services.Features.TicketMediator.Commands
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-
-    public UpdateTicketCommandHandler(
-        IUnitOfWork unitOfWork,
-        IMapper mapper)
+    public class UpdateTicketCommandHandler
+        : IRequestHandler<UpdateTicketCommand, TicketDto?>
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-    public async Task<TicketDto?> Handle(
-        UpdateTicketCommand request,
-        CancellationToken cancellationToken)
-    {
-        var ticket = await _unitOfWork.Tickets
-            .GetByIdAsync(request.TicketId);
+        public UpdateTicketCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
 
-        if (ticket == null)
-            return null;
+        public async Task<TicketDto?> Handle(
+            UpdateTicketCommand request,
+            CancellationToken cancellationToken)
+        {
+            var ticket = await _unitOfWork.Tickets.GetByIdAsync(request.TicketId);
 
-        if (ticket.UserId != request.ClientId)
-            throw new Exception("Not your ticket");
+            if (ticket == null)
+                return null;
 
-        if (ticket.Status != TicketStatus.New)
-            throw new Exception("Only new tickets can be edited");
+            if (ticket.UserId != request.ClientId)
+                throw new ForbiddenException("Not your ticket");
 
-        var product = await _unitOfWork.Products
-            .GetByIdAsync(request.Dto.ProductId);
+            if (ticket.Status != TicketStatus.New)
+                throw new ValidationException("Only new tickets can be edited");
 
-        if (product == null)
-            throw new Exception("Product not found");
+            var product = await _unitOfWork.Products.GetByIdAsync(request.Dto.ProductId);
 
-        _mapper.Map(request.Dto, ticket);
+            if (product == null)
+                throw new NotFoundException("Product not found");
 
-        await _unitOfWork.SaveChangesAsync();
+            _mapper.Map(request.Dto, ticket);
 
-        return _mapper.Map<TicketDto>(ticket);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<TicketDto>(ticket);
+        }
     }
 }

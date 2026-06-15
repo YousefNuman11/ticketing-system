@@ -1,37 +1,34 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MediatR;
 using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
-using TicketingSystem.Services.DTOs.TicketDtos;
+using TicketingSystem.Services.Features.TicketMediator.Contracts;
 using TicketingSystem.Services.Helpers;
 
-public class GetMyAssignedTicketsQueryHandler
-    : IRequestHandler<GetMyAssignedTicketsQuery,
-        PagedResult<TicketDto>>
+namespace TicketingSystem.Services.Features.TicketMediator.Queries
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-
-    public GetMyAssignedTicketsQueryHandler(
-        IUnitOfWork unitOfWork,
-        IMapper mapper)
+    public class GetMyAssignedTicketsQueryHandler
+        : IRequestHandler<GetMyAssignedTicketsQuery, PagedResult<TicketDto>>
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-    public async Task<PagedResult<TicketDto>> Handle(
-        GetMyAssignedTicketsQuery request,
-        CancellationToken cancellationToken)
-    {
-        var query = _unitOfWork.Tickets
-            .QueryTickets()
-            .Where(t => t.AssignedEmployeeId == request.EmployeeId);
+        public GetMyAssignedTicketsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
 
-        return await PaginationHelper
-            .ToPagedResultAsync<Ticket, TicketDto>(
-                query,
-                request.Pagination,
-                _mapper);
+        public async Task<PagedResult<TicketDto>> Handle(
+            GetMyAssignedTicketsQuery request,
+            CancellationToken cancellationToken)
+        {
+            var query = _unitOfWork.Tickets
+                .QueryTickets()
+                .Where(t => t.AssignedEmployeeId == request.EmployeeId);
+
+            return await PaginationHelper
+                .ToPagedResultAsync<Ticket, TicketDto>(query, request.Pagination, _mapper);
+        }
     }
 }

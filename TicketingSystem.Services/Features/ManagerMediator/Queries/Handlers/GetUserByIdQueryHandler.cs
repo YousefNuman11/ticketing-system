@@ -1,30 +1,29 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MediatR;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
-using TicketingSystem.Services.DTOs.User;
+using TicketingSystem.Services.Features.ManagerMediator.Contracts;
 
-public class GetUserByIdQueryHandler
-    : IRequestHandler<GetUserByIdQuery, UserDto?>
+namespace TicketingSystem.Services.Features.ManagerMediator.Queries
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-
-    public GetUserByIdQueryHandler(
-        IUnitOfWork unitOfWork,
-        IMapper mapper)
+    public class GetUserByIdQueryHandler
+        : IRequestHandler<GetUserByIdQuery, UserDto?>
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-    public async Task<UserDto?> Handle(
-        GetUserByIdQuery request,
-        CancellationToken cancellationToken)
-    {
-        var user = await _unitOfWork.Users.GetByIdAsync(request.Id);
+        public GetUserByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
 
-        return user == null
-            ? null
-            : _mapper.Map<UserDto>(user);
+        public async Task<UserDto?> Handle(
+            GetUserByIdQuery request,
+            CancellationToken cancellationToken)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(request.Id);
+
+            return user == null ? null : _mapper.Map<UserDto>(user);
+        }
     }
 }

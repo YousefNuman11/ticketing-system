@@ -1,8 +1,9 @@
-﻿using MediatR;
-using TicketingSystem.Services.DTOs.CommentDtos;
+using MediatR;
+using TicketingSystem.Services.Features.TicketMediator.Contracts;
 using TicketingSystem.Services.Helpers;
 
-public record GetCommentsQuery(
-    Guid TicketId,
-    PaginationDto Pagination
-) : IRequest<PagedResult<CommentDto>>;
+namespace TicketingSystem.Services.Features.TicketMediator.Queries
+{
+    public record GetCommentsQuery(Guid TicketId, PaginationDto Pagination)
+        : IRequest<PagedResult<CommentDto>>;
+}

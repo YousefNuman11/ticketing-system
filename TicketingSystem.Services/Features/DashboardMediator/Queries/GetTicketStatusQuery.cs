@@ -1,6 +1,6 @@
-﻿using MediatR;
+using MediatR;
 
-namespace TicketingSystem.API.Features.Dashboard.Queries.GetTicketStatus
+namespace TicketingSystem.Services.Features.DashboardMediator.Queries
 {
     public record GetTicketStatusQuery : IRequest<object>;
 }

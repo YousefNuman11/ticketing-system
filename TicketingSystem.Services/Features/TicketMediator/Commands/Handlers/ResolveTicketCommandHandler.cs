@@ -1,33 +1,35 @@
-﻿using MediatR;
+using MediatR;
 using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
+using TicketingSystem.Services.Exceptions;
 
-public class ResolveTicketCommandHandler
-    : IRequestHandler<ResolveTicketCommand>
+namespace TicketingSystem.Services.Features.TicketMediator.Commands
 {
-    private readonly IUnitOfWork _unitOfWork;
-
-    public ResolveTicketCommandHandler(
-        IUnitOfWork unitOfWork)
+    public class ResolveTicketCommandHandler
+        : IRequestHandler<ResolveTicketCommand>
     {
-        _unitOfWork = unitOfWork;
-    }
+        private readonly IUnitOfWork _unitOfWork;
 
-    public async Task Handle(
-        ResolveTicketCommand request,
-        CancellationToken cancellationToken)
-    {
-        var ticket = await _unitOfWork.Tickets
-            .GetByIdAsync(request.TicketId);
+        public ResolveTicketCommandHandler(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
 
-        if (ticket == null)
-            throw new Exception("Ticket not found");
+        public async Task Handle(
+            ResolveTicketCommand request,
+            CancellationToken cancellationToken)
+        {
+            var ticket = await _unitOfWork.Tickets.GetByIdAsync(request.TicketId);
 
-        if (ticket.AssignedEmployeeId != request.EmployeeId)
-            throw new Exception("Not assigned to you");
+            if (ticket == null)
+                throw new NotFoundException("Ticket not found");
 
-        ticket.Status = TicketStatus.Resolved;
+            if (ticket.AssignedEmployeeId != request.EmployeeId)
+                throw new ForbiddenException("Not assigned to you");
 
-        await _unitOfWork.SaveChangesAsync();
+            ticket.Status = TicketStatus.Resolved;
+
+            await _unitOfWork.SaveChangesAsync();
+        }
     }
 }

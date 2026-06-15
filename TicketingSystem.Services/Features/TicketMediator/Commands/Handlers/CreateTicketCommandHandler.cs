@@ -1,11 +1,11 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MediatR;
-using TicketingSystem.API.Features.Tickets.Commands.CreateTicket;
 using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
-using TicketingSystem.Services.DTOs.TicketDtos;
-using TicketingSystem.Repository.Models;
-namespace TicketingSystem.Services.Features.TicketMediator.Commands.Handler
+using TicketingSystem.Services.Features.TicketMediator.Contracts;
+using TicketingSystem.Services.Exceptions;
+
+namespace TicketingSystem.Services.Features.TicketMediator.Commands
 {
     public class CreateTicketCommandHandler
         : IRequestHandler<CreateTicketCommand, TicketDto>
@@ -13,9 +13,7 @@ namespace TicketingSystem.Services.Features.TicketMediator.Commands.Handler
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CreateTicketCommandHandler(
-            IUnitOfWork unitOfWork,
-            IMapper mapper)
+        public CreateTicketCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -25,11 +23,10 @@ namespace TicketingSystem.Services.Features.TicketMediator.Commands.Handler
             CreateTicketCommand request,
             CancellationToken cancellationToken)
         {
-            var product = await _unitOfWork.Products
-                .GetByIdAsync(request.Dto.ProductId);
+            var product = await _unitOfWork.Products.GetByIdAsync(request.Dto.ProductId);
 
             if (product == null)
-                throw new Exception("Product not found");
+                throw new NotFoundException("Product not found");
 
             var ticket = _mapper.Map<Ticket>(request.Dto);
 

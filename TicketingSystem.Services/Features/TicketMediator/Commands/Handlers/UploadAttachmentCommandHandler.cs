@@ -1,74 +1,67 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MediatR;
 using TicketingSystem.Repository.Models;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
-using TicketingSystem.Services.DTOs.TicketAttachmentDto;
+using TicketingSystem.Services.Features.TicketMediator.Contracts;
+using TicketingSystem.Services.Exceptions;
 
-public class UploadAttachmentCommandHandler
-    : IRequestHandler<UploadAttachmentCommand, AttachmentDto>
+namespace TicketingSystem.Services.Features.TicketMediator.Commands
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-
-    public UploadAttachmentCommandHandler(
-        IUnitOfWork unitOfWork,
-        IMapper mapper)
+    public class UploadAttachmentCommandHandler
+        : IRequestHandler<UploadAttachmentCommand, AttachmentDto>
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-    public async Task<AttachmentDto> Handle(
-        UploadAttachmentCommand request,
-        CancellationToken cancellationToken)
-    {
-        var ticket = await _unitOfWork.Tickets
-            .GetByIdAsync(request.TicketId);
-
-        if (ticket == null)
-            throw new Exception("Ticket not found");
-
-        if (ticket.UserId != request.UserId &&
-            ticket.AssignedEmployeeId != request.UserId)
+        public UploadAttachmentCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            throw new Exception("Not allowed");
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        var uploadsFolder = Path.Combine(
-            Directory.GetCurrentDirectory(),
-            "Uploads");
-
-        if (!Directory.Exists(uploadsFolder))
-            Directory.CreateDirectory(uploadsFolder);
-
-        var uniqueFileName =
-            $"{Guid.NewGuid()}_{request.File.FileName}";
-
-        var filePath = Path.Combine(
-            uploadsFolder,
-            uniqueFileName);
-
-        using (var stream =
-               new FileStream(filePath, FileMode.Create))
+        public async Task<AttachmentDto> Handle(
+            UploadAttachmentCommand request,
+            CancellationToken cancellationToken)
         {
-            await request.File.CopyToAsync(stream);
+            var ticket = await _unitOfWork.Tickets.GetByIdAsync(request.TicketId);
+
+            if (ticket == null)
+                throw new NotFoundException("Ticket not found");
+
+            if (ticket.UserId != request.UserId &&
+                ticket.AssignedEmployeeId != request.UserId)
+            {
+                throw new ForbiddenException("Not allowed");
+            }
+
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            var uniqueFileName = $"{Guid.NewGuid()}_{request.File.FileName}";
+
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await request.File.CopyToAsync(stream, cancellationToken);
+            }
+
+            var attachment = new TicketAttachment
+            {
+                Id = Guid.NewGuid(),
+                TicketId = request.TicketId,
+                FileName = request.File.FileName,
+                FileUrl = uniqueFileName,
+                UploadedBy = request.UserId,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _unitOfWork.TicketAttachments.AddAsync(attachment);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<AttachmentDto>(attachment);
         }
-
-        var attachment = new TicketAttachment
-        {
-            Id = Guid.NewGuid(),
-            TicketId = request.TicketId,
-            FileName = request.File.FileName,
-            FileUrl = uniqueFileName,
-            UploadedBy = request.UserId,
-            CreatedAt = DateTime.UtcNow
-        };
-
-        await _unitOfWork.TicketAttachments
-            .AddAsync(attachment);
-
-        await _unitOfWork.SaveChangesAsync();
-
-        return _mapper.Map<AttachmentDto>(attachment);
     }
 }

@@ -1,6 +1,7 @@
-﻿using MediatR;
-using TicketingSystem.Services.DTOs.User;
+using MediatR;
+using TicketingSystem.Services.Features.ManagerMediator.Contracts;
 
-public record CreateEmployeeCommand(
-    CreateEmployeeDto Dto
-) : IRequest<UserDto>;
+namespace TicketingSystem.Services.Features.ManagerMediator.Commands
+{
+    public record CreateEmployeeCommand(CreateEmployeeDto Dto) : IRequest<UserDto>;
+}

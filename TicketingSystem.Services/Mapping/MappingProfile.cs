@@ -1,39 +1,44 @@
-﻿using AutoMapper;
+using AutoMapper;
 using TicketingSystem.Repository.Models;
-using TicketingSystem.Services.DTOs.AuthenticationDto;
-using TicketingSystem.Services.DTOs.CommentDtos;
-using TicketingSystem.Services.DTOs.ProductDtos;
-using TicketingSystem.Services.DTOs.TicketAttachmentDto;
-using TicketingSystem.Services.DTOs.TicketDtos;
-using TicketingSystem.Services.DTOs.User;
+using TicketingSystem.Services.Features.AuthMediator.Contracts;
+using TicketingSystem.Services.Features.ManagerMediator.Contracts;
+using TicketingSystem.Services.Features.ProductMediator.Contracts;
+using TicketingSystem.Services.Features.TicketMediator.Contracts;
 
-public class MappingProfile : Profile
+namespace TicketingSystem.Services.Mapping
 {
-    public MappingProfile()
+    public class MappingProfile : Profile
     {
-        CreateMap<User, UserDto>();
+        public MappingProfile()
+        {
+            // Users
+            CreateMap<User, UserDto>();
+            CreateMap<RegisterDto, User>();
+            CreateMap<CreateEmployeeDto, User>();
+            CreateMap<UpdateUserDto, User>();
 
-        CreateMap<RegisterDto, User>();
-        CreateMap<CreateEmployeeDto, User>();
-        CreateMap<UpdateUserDto, User>();
+            // Clients with their tickets (manager view)
+            CreateMap<User, ClientWithTicketsDto>()
+                .ForMember(d => d.Tickets, o => o.MapFrom(s => s.CreatedTickets));
+            CreateMap<Ticket, ClientTicketDto>()
+                .ForMember(d => d.Status, o => o.MapFrom(s => s.Status.ToString()));
 
+            // Tickets
+            CreateMap<CreateTicketDto, Ticket>();
+            CreateMap<UpdateTicketDto, Ticket>();
+            CreateMap<Ticket, TicketDto>()
+                .ForMember(d => d.Status, o => o.MapFrom(s => s.Status.ToString()));
 
-        CreateMap<CreateTicketDto, Ticket>();
-        CreateMap<UpdateTicketDto, Ticket>();
-        CreateMap<Ticket, TicketDto>()
-        .ForMember(
-            d => d.Status,
-            o => o.MapFrom(s => s.Status.ToString())
-        );
+            // Products
+            CreateMap<CreateProductDto, Product>();
+            CreateMap<Product, ProductDto>();
 
-        CreateMap<CreateProductDto, Product>();
-        CreateMap<Product, ProductDto>();
+            // Comments
+            CreateMap<AddCommentDto, TicketsComment>();
+            CreateMap<TicketsComment, CommentDto>();
 
-        CreateMap<AddCommentDto, TicketsComment>();
-        CreateMap<TicketsComment, CommentDto>();
-
-        CreateMap<UploadAttachmentDto, TicketAttachment>();
-
-        CreateMap<TicketAttachment, AttachmentDto>();
+            // Attachments
+            CreateMap<TicketAttachment, AttachmentDto>();
+        }
     }
 }

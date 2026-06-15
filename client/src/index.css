@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 font-sans text-gray-700 antialiased;
+  }
+}
+
+@layer components {
+  .form-input {
+    @apply h-11 w-full rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-800 shadow-theme-sm outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-100;
+  }
+  .form-label {
+    @apply mb-1.5 block text-sm font-medium text-gray-700;
+  }
+}

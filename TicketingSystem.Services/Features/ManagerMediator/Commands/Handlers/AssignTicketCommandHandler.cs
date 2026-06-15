@@ -1,28 +1,41 @@
-﻿using MediatR;
-using TicketingSystem.Services.Service.Abstraction;
+using MediatR;
+using TicketingSystem.Repository.Models;
+using TicketingSystem.Repository.UnitOfWork.Abstraction;
+using TicketingSystem.Services.Exceptions;
 
-namespace TicketingSystem.API.Features.Manager.Commands.AssignTicket
+namespace TicketingSystem.Services.Features.ManagerMediator.Commands
 {
     public class AssignTicketCommandHandler
-        : IRequestHandler<AssignTicketCommand, Unit>
+        : IRequestHandler<AssignTicketCommand>
     {
-        private readonly ITicketService _ticketService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AssignTicketCommandHandler(
-            ITicketService ticketService)
+        public AssignTicketCommandHandler(IUnitOfWork unitOfWork)
         {
-            _ticketService = ticketService;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<Unit> Handle(
+        public async Task Handle(
             AssignTicketCommand request,
             CancellationToken cancellationToken)
         {
-            await _ticketService.AssignTicketAsync(
-                request.TicketId,
-                request.EmployeeId);
+            var ticket = await _unitOfWork.Tickets.GetByIdAsync(request.TicketId);
 
-            return Unit.Value;
+            if (ticket == null)
+                throw new NotFoundException("Ticket not found");
+
+            if (ticket.AssignedEmployeeId != null)
+                throw new ValidationException("Already assigned");
+
+            var employee = await _unitOfWork.Users.GetByIdAsync(request.EmployeeId);
+
+            if (employee == null || employee.Role != UserRole.Employee)
+                throw new ValidationException("Invalid employee");
+
+            ticket.AssignedEmployeeId = request.EmployeeId;
+            ticket.Status = TicketStatus.InProgress;
+
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

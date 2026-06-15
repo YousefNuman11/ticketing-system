@@ -1,11 +1,9 @@
-﻿using MediatR;
-using TicketingSystem.Services.DTOs.TicketDtos;
+using MediatR;
+using TicketingSystem.Services.Features.TicketMediator.Contracts;
 using TicketingSystem.Services.Helpers;
 
-namespace TicketingSystem.API.Features.Manager.Queries.GetAllTickets
+namespace TicketingSystem.Services.Features.ManagerMediator.Queries
 {
-    public record GetAllTicketsQuery(
-        TicketFilterDto Filter,
-        PaginationDto Pagination
-    ) : IRequest<PagedResult<TicketDto>>;
+    public record GetAllTicketsQuery(TicketFilterDto Filter, PaginationDto Pagination)
+        : IRequest<PagedResult<TicketDto>>;
 }

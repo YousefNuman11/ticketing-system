@@ -1,35 +1,36 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MediatR;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
-using TicketingSystem.Services.DTOs.User;
+using TicketingSystem.Services.Features.ManagerMediator.Contracts;
 
-public class ToggleUserStatusCommandHandler
-    : IRequestHandler<ToggleUserStatusCommand, UserDto?>
+namespace TicketingSystem.Services.Features.ManagerMediator.Commands
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-
-    public ToggleUserStatusCommandHandler(
-        IUnitOfWork unitOfWork,
-        IMapper mapper)
+    public class ToggleUserStatusCommandHandler
+        : IRequestHandler<ToggleUserStatusCommand, UserDto?>
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-    public async Task<UserDto?> Handle(
-        ToggleUserStatusCommand request,
-        CancellationToken cancellationToken)
-    {
-        var user = await _unitOfWork.Users.GetByIdAsync(request.Id);
+        public ToggleUserStatusCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
 
-        if (user == null)
-            return null;
+        public async Task<UserDto?> Handle(
+            ToggleUserStatusCommand request,
+            CancellationToken cancellationToken)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(request.Id);
 
-        user.IsActive = !user.IsActive;
+            if (user == null)
+                return null;
 
-        await _unitOfWork.SaveChangesAsync();
+            user.IsActive = !user.IsActive;
 
-        return _mapper.Map<UserDto>(user);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<UserDto>(user);
+        }
     }
 }

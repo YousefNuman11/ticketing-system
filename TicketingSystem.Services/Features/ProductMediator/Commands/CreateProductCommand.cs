@@ -1,9 +1,7 @@
-﻿using MediatR;
-using TicketingSystem.Services.DTOs.ProductDtos;
+using MediatR;
+using TicketingSystem.Services.Features.ProductMediator.Contracts;
 
-namespace TicketingSystem.API.Features.ProductMediator.Commands.CreateProduct
+namespace TicketingSystem.Services.Features.ProductMediator.Commands
 {
-    public record CreateProductCommand(
-        CreateProductDto ProductDto
-    ) : IRequest<ProductDto>;
+    public record CreateProductCommand(CreateProductDto ProductDto) : IRequest<ProductDto>;
 }

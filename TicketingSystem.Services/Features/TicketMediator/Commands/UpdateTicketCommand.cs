@@ -1,8 +1,8 @@
-﻿using MediatR;
-using TicketingSystem.Services.DTOs.TicketDtos;
+using MediatR;
+using TicketingSystem.Services.Features.TicketMediator.Contracts;
 
-public record UpdateTicketCommand(
-    Guid TicketId,
-    Guid ClientId,
-    UpdateTicketDto Dto
-) : IRequest<TicketDto?>;
+namespace TicketingSystem.Services.Features.TicketMediator.Commands
+{
+    public record UpdateTicketCommand(Guid TicketId, Guid ClientId, UpdateTicketDto Dto)
+        : IRequest<TicketDto?>;
+}

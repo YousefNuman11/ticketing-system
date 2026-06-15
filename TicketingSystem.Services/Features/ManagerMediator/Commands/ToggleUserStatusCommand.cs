@@ -1,6 +1,7 @@
-﻿using MediatR;
-using TicketingSystem.Services.DTOs.User;
+using MediatR;
+using TicketingSystem.Services.Features.ManagerMediator.Contracts;
 
-public record ToggleUserStatusCommand(
-    Guid Id
-) : IRequest<UserDto?>;
+namespace TicketingSystem.Services.Features.ManagerMediator.Commands
+{
+    public record ToggleUserStatusCommand(Guid Id) : IRequest<UserDto?>;
+}

@@ -1,6 +1,7 @@
-﻿using MediatR;
-using TicketingSystem.Services.DTOs.User;
+using MediatR;
+using TicketingSystem.Services.Features.ManagerMediator.Contracts;
 
-public record GetUserByIdQuery(
-    Guid Id
-) : IRequest<UserDto?>;
+namespace TicketingSystem.Services.Features.ManagerMediator.Queries
+{
+    public record GetUserByIdQuery(Guid Id) : IRequest<UserDto?>;
+}
