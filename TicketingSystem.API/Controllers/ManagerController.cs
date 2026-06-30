@@ -31,9 +31,10 @@ namespace TicketingSystem.API.Controllers
 
         // List employees
         [HttpGet("employees")]
-        public async Task<IActionResult> GetEmployees([FromQuery] PaginationDto pagination)
+        public async Task<IActionResult> GetEmployees([FromQuery] PaginationDto pagination,
+            [FromQuery] string? search)
         {
-            var result = await _mediator.Send(new GetEmployeesQuery(pagination));
+            var result = await _mediator.Send(new GetEmployeesQuery(pagination, search));
             return Ok(result);
         }
 
@@ -71,9 +72,10 @@ namespace TicketingSystem.API.Controllers
 
         // Clients together with their tickets
         [HttpGet("clients-with-tickets")]
-        public async Task<IActionResult> GetClientsWithTickets([FromQuery] PaginationDto pagination)
+        public async Task<IActionResult> GetClientsWithTickets([FromQuery] PaginationDto pagination,
+            [FromQuery] string? search)
         {
-            var result = await _mediator.Send(new GetClientsWithTicketsQuery(pagination));
+            var result = await _mediator.Send(new GetClientsWithTicketsQuery(pagination, search));
             return Ok(result);
         }
 

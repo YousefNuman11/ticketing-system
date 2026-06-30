@@ -27,6 +27,11 @@ namespace TicketingSystem.Services.Features.ProductMediator.Queries
                 .GetProductsQuery()
                 .Where(p => p.IsActive);
 
+            if (!string.IsNullOrWhiteSpace(request.Search))
+            {
+                query = query.Where(p => p.Name.Contains(request.Search));
+            }
+
             return await PaginationHelper
                 .ToPagedResultAsync<Product, ProductDto>(query, request.Pagination, _mapper);
         }

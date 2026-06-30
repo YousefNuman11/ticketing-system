@@ -24,7 +24,7 @@ namespace TicketingSystem.Services.Features.TicketMediator.Queries
             GetMyTicketsQuery request,
             CancellationToken cancellationToken)
         {
-            var spec = new TicketsByUserSpec(request.ClientId);
+            var spec = new TicketsByUserSpec(request.ClientId, request.Search);
 
             var query = _unitOfWork.Tickets.Query(spec);
 

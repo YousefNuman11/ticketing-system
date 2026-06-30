@@ -1,0 +1,515 @@
+2026-06-18 11:52:30.891 +03:00 [INF] Executed DbCommand (100ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Users] AS [u]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-06-18 11:52:31.510 +03:00 [INF] User profile is available. Using 'C:\Users\Yousef\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-06-18 11:52:32.341 +03:00 [INF] Now listening on: https://localhost:7160
+2026-06-18 11:52:32.342 +03:00 [INF] Now listening on: http://localhost:5233
+2026-06-18 11:52:32.807 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-18 11:52:32.841 +03:00 [INF] Hosting environment: Development
+2026-06-18 11:52:32.851 +03:00 [INF] Content root path: C:\Users\Yousef\source\repos\TicketingSystem\TicketingSystem.API
+2026-06-18 11:52:35.543 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/auth/login - null null
+2026-06-18 11:52:35.737 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:35.748 +03:00 [INF] HTTP OPTIONS /api/auth/login responded 204 in 62.2551 ms
+2026-06-18 11:52:35.759 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/auth/login - 204 null null 246.8576ms
+2026-06-18 11:52:35.773 +03:00 [INF] Request starting HTTP/2 POST https://localhost:7160/api/auth/login - application/json 56
+2026-06-18 11:52:35.794 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:35.925 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.AuthController.Login (TicketingSystem.API)'
+2026-06-18 11:52:35.975 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TicketingSystem.Services.Features.AuthMediator.Contracts.LoginDto) on controller TicketingSystem.API.Controllers.AuthController (TicketingSystem.API).
+2026-06-18 11:52:36.008 +03:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-06-18 11:52:36.353 +03:00 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-06-18 11:52:36.606 +03:00 [INF] Executed DbCommand (51ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [u].[Id], [u].[Address], [u].[DateOfBirth], [u].[Email], [u].[FullName], [u].[ImageUrl], [u].[IsActive], [u].[MobileNumber], [u].[PasswordHash], [u].[Role]
+FROM [Users] AS [u]
+2026-06-18 11:52:37.615 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:52:37.655 +03:00 [INF] Executed action TicketingSystem.API.Controllers.AuthController.Login (TicketingSystem.API) in 1665.174ms
+2026-06-18 11:52:37.657 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.AuthController.Login (TicketingSystem.API)'
+2026-06-18 11:52:37.663 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 1870.9753 ms
+2026-06-18 11:52:37.676 +03:00 [INF] Request finished HTTP/2 POST https://localhost:7160/api/auth/login - 200 null application/json; charset=utf-8 1903.2209ms
+2026-06-18 11:52:37.722 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/dashboard/status - null null
+2026-06-18 11:52:37.723 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/dashboard/trend - null null
+2026-06-18 11:52:37.722 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/dashboard/top-employees - null null
+2026-06-18 11:52:37.723 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/dashboard/top-employees - null null
+2026-06-18 11:52:37.723 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/dashboard/status - null null
+2026-06-18 11:52:37.722 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/dashboard/trend - null null
+2026-06-18 11:52:37.768 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:37.771 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:37.774 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:37.777 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:37.783 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:37.787 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:37.789 +03:00 [INF] HTTP OPTIONS /api/dashboard/status responded 204 in 52.6892 ms
+2026-06-18 11:52:37.790 +03:00 [INF] HTTP OPTIONS /api/dashboard/trend responded 204 in 19.9846 ms
+2026-06-18 11:52:37.791 +03:00 [INF] HTTP OPTIONS /api/dashboard/top-employees responded 204 in 17.6032 ms
+2026-06-18 11:52:37.792 +03:00 [INF] HTTP OPTIONS /api/dashboard/top-employees responded 204 in 15.1028 ms
+2026-06-18 11:52:37.794 +03:00 [INF] HTTP OPTIONS /api/dashboard/status responded 204 in 11.0903 ms
+2026-06-18 11:52:37.795 +03:00 [INF] HTTP OPTIONS /api/dashboard/trend responded 204 in 7.6418 ms
+2026-06-18 11:52:37.799 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/dashboard/status - 204 null null 77.846ms
+2026-06-18 11:52:37.808 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/dashboard/status - null null
+2026-06-18 11:52:37.808 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/dashboard/trend - 204 null null 85.0301ms
+2026-06-18 11:52:37.811 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/dashboard/top-employees - 204 null null 89.4305ms
+2026-06-18 11:52:37.814 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/dashboard/trend - null null
+2026-06-18 11:52:37.817 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/dashboard/top-employees - null null
+2026-06-18 11:52:37.819 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/dashboard/top-employees - 204 null null 96.3631ms
+2026-06-18 11:52:37.821 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/dashboard/status - 204 null null 99.0411ms
+2026-06-18 11:52:37.824 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/dashboard/trend - 204 null null 102.2063ms
+2026-06-18 11:52:37.837 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:37.857 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:37.860 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:38.000 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.DashboardController.Status (TicketingSystem.API)'
+2026-06-18 11:52:38.000 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.DashboardController.TopEmployees (TicketingSystem.API)'
+2026-06-18 11:52:38.000 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.DashboardController.Trend (TicketingSystem.API)'
+2026-06-18 11:52:38.018 +03:00 [INF] Route matched with {action = "Status", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Status() on controller TicketingSystem.API.Controllers.DashboardController (TicketingSystem.API).
+2026-06-18 11:52:38.020 +03:00 [INF] Route matched with {action = "TopEmployees", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] TopEmployees() on controller TicketingSystem.API.Controllers.DashboardController (TicketingSystem.API).
+2026-06-18 11:52:38.022 +03:00 [INF] Route matched with {action = "Trend", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Trend() on controller TicketingSystem.API.Controllers.DashboardController (TicketingSystem.API).
+2026-06-18 11:52:38.346 +03:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [t0].[Key] AS [Date], COUNT(*) AS [Count]
+FROM (
+    SELECT CONVERT(date, [t].[CreatedAt]) AS [Key]
+    FROM [Tickets] AS [t]
+) AS [t0]
+GROUP BY [t0].[Key]
+ORDER BY [t0].[Key]
+2026-06-18 11:52:38.352 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:52:38.374 +03:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE [t].[Status]
+    WHEN 0 THEN N'New'
+    WHEN 1 THEN N'Assigned'
+    WHEN 2 THEN N'InProgress'
+    WHEN 3 THEN N'Resolved'
+    WHEN 4 THEN N'Closed'
+    ELSE CAST([t].[Status] AS nvarchar(max))
+END AS [Status], COUNT(*) AS [Count]
+FROM [Tickets] AS [t]
+GROUP BY [t].[Status]
+2026-06-18 11:52:38.388 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:52:38.388 +03:00 [INF] Executed action TicketingSystem.API.Controllers.DashboardController.Trend (TicketingSystem.API) in 355.7658ms
+2026-06-18 11:52:38.404 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/dashboard/trend - null null
+2026-06-18 11:52:38.408 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.DashboardController.Trend (TicketingSystem.API)'
+2026-06-18 11:52:38.409 +03:00 [INF] Executed action TicketingSystem.API.Controllers.DashboardController.Status (TicketingSystem.API) in 383.5566ms
+2026-06-18 11:52:38.411 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/dashboard/status - null null
+2026-06-18 11:52:38.412 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:38.414 +03:00 [INF] HTTP GET /api/dashboard/trend responded 200 in 557.5047 ms
+2026-06-18 11:52:38.417 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.DashboardController.Status (TicketingSystem.API)'
+2026-06-18 11:52:38.421 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:38.425 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/dashboard/trend - 200 null application/json; charset=utf-8 612.6337ms
+2026-06-18 11:52:38.427 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.DashboardController.Trend (TicketingSystem.API)'
+2026-06-18 11:52:38.439 +03:00 [INF] HTTP GET /api/dashboard/status responded 200 in 605.2327 ms
+2026-06-18 11:52:38.441 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.DashboardController.Status (TicketingSystem.API)'
+2026-06-18 11:52:38.448 +03:00 [INF] Route matched with {action = "Trend", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Trend() on controller TicketingSystem.API.Controllers.DashboardController (TicketingSystem.API).
+2026-06-18 11:52:38.451 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/dashboard/status - 200 null application/json; charset=utf-8 642.9677ms
+2026-06-18 11:52:38.452 +03:00 [INF] Route matched with {action = "Status", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Status() on controller TicketingSystem.API.Controllers.DashboardController (TicketingSystem.API).
+2026-06-18 11:52:38.488 +03:00 [INF] Executed DbCommand (74ms) [Parameters=[@p='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(@p) [u].[FullName] AS [EmployeeName], COUNT(CASE
+    WHEN [t].[Status] = 3 THEN 1
+END) AS [ResolvedCount]
+FROM [Tickets] AS [t]
+LEFT JOIN [Users] AS [u] ON [t].[AssignedEmployeeId] = [u].[Id]
+WHERE [t].[AssignedEmployeeId] IS NOT NULL
+GROUP BY [t].[AssignedEmployeeId], [u].[FullName]
+ORDER BY COUNT(CASE
+    WHEN [t].[Status] = 3 THEN 1
+END) DESC
+2026-06-18 11:52:38.491 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [t0].[Key] AS [Date], COUNT(*) AS [Count]
+FROM (
+    SELECT CONVERT(date, [t].[CreatedAt]) AS [Key]
+    FROM [Tickets] AS [t]
+) AS [t0]
+GROUP BY [t0].[Key]
+ORDER BY [t0].[Key]
+2026-06-18 11:52:38.500 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:52:38.501 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:52:38.513 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE [t].[Status]
+    WHEN 0 THEN N'New'
+    WHEN 1 THEN N'Assigned'
+    WHEN 2 THEN N'InProgress'
+    WHEN 3 THEN N'Resolved'
+    WHEN 4 THEN N'Closed'
+    ELSE CAST([t].[Status] AS nvarchar(max))
+END AS [Status], COUNT(*) AS [Count]
+FROM [Tickets] AS [t]
+GROUP BY [t].[Status]
+2026-06-18 11:52:38.515 +03:00 [INF] Executed action TicketingSystem.API.Controllers.DashboardController.TopEmployees (TicketingSystem.API) in 487.5222ms
+2026-06-18 11:52:38.519 +03:00 [INF] Executed action TicketingSystem.API.Controllers.DashboardController.Trend (TicketingSystem.API) in 64.6203ms
+2026-06-18 11:52:38.519 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/dashboard/top-employees - null null
+2026-06-18 11:52:38.523 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:52:38.536 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.DashboardController.TopEmployees (TicketingSystem.API)'
+2026-06-18 11:52:38.538 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.DashboardController.Trend (TicketingSystem.API)'
+2026-06-18 11:52:38.543 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:38.544 +03:00 [INF] Executed action TicketingSystem.API.Controllers.DashboardController.Status (TicketingSystem.API) in 59.542ms
+2026-06-18 11:52:38.547 +03:00 [INF] HTTP GET /api/dashboard/top-employees responded 200 in 686.5218 ms
+2026-06-18 11:52:38.548 +03:00 [INF] HTTP GET /api/dashboard/trend responded 200 in 136.5726 ms
+2026-06-18 11:52:38.550 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.DashboardController.TopEmployees (TicketingSystem.API)'
+2026-06-18 11:52:38.552 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.DashboardController.Status (TicketingSystem.API)'
+2026-06-18 11:52:38.555 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/dashboard/top-employees - 200 null application/json; charset=utf-8 738.5364ms
+2026-06-18 11:52:38.558 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/dashboard/trend - 200 null application/json; charset=utf-8 153.9349ms
+2026-06-18 11:52:38.559 +03:00 [INF] Route matched with {action = "TopEmployees", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] TopEmployees() on controller TicketingSystem.API.Controllers.DashboardController (TicketingSystem.API).
+2026-06-18 11:52:38.562 +03:00 [INF] HTTP GET /api/dashboard/status responded 200 in 141.0020 ms
+2026-06-18 11:52:38.587 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/dashboard/status - 200 null application/json; charset=utf-8 175.5576ms
+2026-06-18 11:52:38.589 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@p='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(@p) [u].[FullName] AS [EmployeeName], COUNT(CASE
+    WHEN [t].[Status] = 3 THEN 1
+END) AS [ResolvedCount]
+FROM [Tickets] AS [t]
+LEFT JOIN [Users] AS [u] ON [t].[AssignedEmployeeId] = [u].[Id]
+WHERE [t].[AssignedEmployeeId] IS NOT NULL
+GROUP BY [t].[AssignedEmployeeId], [u].[FullName]
+ORDER BY COUNT(CASE
+    WHEN [t].[Status] = 3 THEN 1
+END) DESC
+2026-06-18 11:52:38.594 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:52:38.600 +03:00 [INF] Executed action TicketingSystem.API.Controllers.DashboardController.TopEmployees (TicketingSystem.API) in 23.2175ms
+2026-06-18 11:52:38.603 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.DashboardController.TopEmployees (TicketingSystem.API)'
+2026-06-18 11:52:38.606 +03:00 [INF] HTTP GET /api/dashboard/top-employees responded 200 in 63.1802 ms
+2026-06-18 11:52:38.657 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/dashboard/top-employees - 200 null application/json; charset=utf-8 138.2497ms
+2026-06-18 11:52:55.375 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/manager/all?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:52:55.375 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/manager/all?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:52:55.378 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:55.382 +03:00 [INF] HTTP OPTIONS /api/manager/all responded 204 in 3.4760 ms
+2026-06-18 11:52:55.382 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:55.385 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/manager/all?pageNumber=1&pageSize=10 - 204 null null 9.7097ms
+2026-06-18 11:52:55.386 +03:00 [INF] HTTP OPTIONS /api/manager/all responded 204 in 3.3894 ms
+2026-06-18 11:52:55.388 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/manager/all?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:52:55.390 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/manager/all?pageNumber=1&pageSize=10 - 204 null null 15.0387ms
+2026-06-18 11:52:55.395 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:55.402 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.ManagerController.GetTickets (TicketingSystem.API)'
+2026-06-18 11:52:55.432 +03:00 [INF] Route matched with {action = "GetTickets", controller = "Manager"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTickets(TicketingSystem.Services.Features.TicketMediator.Contracts.TicketFilterDto, TicketingSystem.Services.Helpers.PaginationDto) on controller TicketingSystem.API.Controllers.ManagerController (TicketingSystem.API).
+2026-06-18 11:52:55.531 +03:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tickets] AS [t]
+2026-06-18 11:52:55.559 +03:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-06-18 11:52:55.560 +03:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-06-18 11:52:55.626 +03:00 [INF] Executed DbCommand (8ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t0].[Id], [t0].[AssignedEmployeeId], [t0].[CreatedAt], [t0].[Description], [t0].[ProductId], [t0].[Status], [t0].[Title], [t0].[UserId], [u].[Id], [u].[Address], [u].[DateOfBirth], [u].[Email], [u].[FullName], [u].[ImageUrl], [u].[IsActive], [u].[MobileNumber], [u].[PasswordHash], [u].[Role], [u0].[Id], [u0].[Address], [u0].[DateOfBirth], [u0].[Email], [u0].[FullName], [u0].[ImageUrl], [u0].[IsActive], [u0].[MobileNumber], [u0].[PasswordHash], [u0].[Role]
+FROM (
+    SELECT [t].[Id], [t].[AssignedEmployeeId], [t].[CreatedAt], [t].[Description], [t].[ProductId], [t].[Status], [t].[Title], [t].[UserId]
+    FROM [Tickets] AS [t]
+    ORDER BY (SELECT 1)
+    OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+) AS [t0]
+INNER JOIN [Users] AS [u] ON [t0].[UserId] = [u].[Id]
+LEFT JOIN [Users] AS [u0] ON [t0].[AssignedEmployeeId] = [u0].[Id]
+2026-06-18 11:52:55.751 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:52:55.772 +03:00 [INF] Executed action TicketingSystem.API.Controllers.ManagerController.GetTickets (TicketingSystem.API) in 336.7967ms
+2026-06-18 11:52:55.777 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/manager/all?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:52:55.785 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.ManagerController.GetTickets (TicketingSystem.API)'
+2026-06-18 11:52:55.789 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:52:55.790 +03:00 [INF] HTTP GET /api/manager/all responded 200 in 395.1191 ms
+2026-06-18 11:52:55.791 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.ManagerController.GetTickets (TicketingSystem.API)'
+2026-06-18 11:52:55.792 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/manager/all?pageNumber=1&pageSize=10 - 200 null application/json; charset=utf-8 404.0285ms
+2026-06-18 11:52:55.793 +03:00 [INF] Route matched with {action = "GetTickets", controller = "Manager"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTickets(TicketingSystem.Services.Features.TicketMediator.Contracts.TicketFilterDto, TicketingSystem.Services.Helpers.PaginationDto) on controller TicketingSystem.API.Controllers.ManagerController (TicketingSystem.API).
+2026-06-18 11:52:55.805 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tickets] AS [t]
+2026-06-18 11:52:55.818 +03:00 [INF] Executed DbCommand (7ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t0].[Id], [t0].[AssignedEmployeeId], [t0].[CreatedAt], [t0].[Description], [t0].[ProductId], [t0].[Status], [t0].[Title], [t0].[UserId], [u].[Id], [u].[Address], [u].[DateOfBirth], [u].[Email], [u].[FullName], [u].[ImageUrl], [u].[IsActive], [u].[MobileNumber], [u].[PasswordHash], [u].[Role], [u0].[Id], [u0].[Address], [u0].[DateOfBirth], [u0].[Email], [u0].[FullName], [u0].[ImageUrl], [u0].[IsActive], [u0].[MobileNumber], [u0].[PasswordHash], [u0].[Role]
+FROM (
+    SELECT [t].[Id], [t].[AssignedEmployeeId], [t].[CreatedAt], [t].[Description], [t].[ProductId], [t].[Status], [t].[Title], [t].[UserId]
+    FROM [Tickets] AS [t]
+    ORDER BY (SELECT 1)
+    OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+) AS [t0]
+INNER JOIN [Users] AS [u] ON [t0].[UserId] = [u].[Id]
+LEFT JOIN [Users] AS [u0] ON [t0].[AssignedEmployeeId] = [u0].[Id]
+2026-06-18 11:52:55.835 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:52:55.838 +03:00 [INF] Executed action TicketingSystem.API.Controllers.ManagerController.GetTickets (TicketingSystem.API) in 37.4735ms
+2026-06-18 11:52:55.839 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.ManagerController.GetTickets (TicketingSystem.API)'
+2026-06-18 11:52:55.840 +03:00 [INF] HTTP GET /api/manager/all responded 200 in 51.8373 ms
+2026-06-18 11:52:55.843 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/manager/all?pageNumber=1&pageSize=10 - 200 null application/json; charset=utf-8 66.5925ms
+2026-06-18 11:53:01.930 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/manager/employees?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:53:01.932 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/manager/employees?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:53:01.941 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:01.939 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:01.951 +03:00 [INF] HTTP OPTIONS /api/manager/employees responded 204 in 11.9970 ms
+2026-06-18 11:53:01.943 +03:00 [INF] HTTP OPTIONS /api/manager/employees responded 204 in 1.9015 ms
+2026-06-18 11:53:01.957 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/manager/employees?pageNumber=1&pageSize=10 - 204 null null 27.0109ms
+2026-06-18 11:53:01.965 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/manager/employees?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:53:01.967 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/manager/employees?pageNumber=1&pageSize=10 - 204 null null 38.3872ms
+2026-06-18 11:53:01.977 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:01.988 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.ManagerController.GetEmployees (TicketingSystem.API)'
+2026-06-18 11:53:02.005 +03:00 [INF] Route matched with {action = "GetEmployees", controller = "Manager"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEmployees(TicketingSystem.Services.Helpers.PaginationDto) on controller TicketingSystem.API.Controllers.ManagerController (TicketingSystem.API).
+2026-06-18 11:53:02.036 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Users] AS [u]
+WHERE [u].[Role] = N'Employee'
+2026-06-18 11:53:02.041 +03:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-06-18 11:53:02.043 +03:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-06-18 11:53:02.067 +03:00 [INF] Executed DbCommand (7ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u].[Id], [u].[Address], [u].[DateOfBirth], [u].[Email], [u].[FullName], [u].[ImageUrl], [u].[IsActive], [u].[MobileNumber], [u].[PasswordHash], [u].[Role]
+FROM [Users] AS [u]
+WHERE [u].[Role] = N'Employee'
+ORDER BY (SELECT 1)
+OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+2026-06-18 11:53:02.084 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:53:02.091 +03:00 [INF] Executed action TicketingSystem.API.Controllers.ManagerController.GetEmployees (TicketingSystem.API) in 82.5988ms
+2026-06-18 11:53:02.093 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.ManagerController.GetEmployees (TicketingSystem.API)'
+2026-06-18 11:53:02.093 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/manager/employees?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:53:02.094 +03:00 [INF] HTTP GET /api/manager/employees responded 200 in 117.4136 ms
+2026-06-18 11:53:02.100 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:02.102 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/manager/employees?pageNumber=1&pageSize=10 - 200 null application/json; charset=utf-8 136.8793ms
+2026-06-18 11:53:02.104 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.ManagerController.GetEmployees (TicketingSystem.API)'
+2026-06-18 11:53:02.109 +03:00 [INF] Route matched with {action = "GetEmployees", controller = "Manager"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEmployees(TicketingSystem.Services.Helpers.PaginationDto) on controller TicketingSystem.API.Controllers.ManagerController (TicketingSystem.API).
+2026-06-18 11:53:02.125 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Users] AS [u]
+WHERE [u].[Role] = N'Employee'
+2026-06-18 11:53:02.141 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u].[Id], [u].[Address], [u].[DateOfBirth], [u].[Email], [u].[FullName], [u].[ImageUrl], [u].[IsActive], [u].[MobileNumber], [u].[PasswordHash], [u].[Role]
+FROM [Users] AS [u]
+WHERE [u].[Role] = N'Employee'
+ORDER BY (SELECT 1)
+OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+2026-06-18 11:53:02.147 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:53:02.157 +03:00 [INF] Executed action TicketingSystem.API.Controllers.ManagerController.GetEmployees (TicketingSystem.API) in 35.343ms
+2026-06-18 11:53:02.158 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.ManagerController.GetEmployees (TicketingSystem.API)'
+2026-06-18 11:53:02.160 +03:00 [INF] HTTP GET /api/manager/employees responded 200 in 59.9411 ms
+2026-06-18 11:53:02.163 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/manager/employees?pageNumber=1&pageSize=10 - 200 null application/json; charset=utf-8 69.6693ms
+2026-06-18 11:53:04.789 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/manager/clients-with-tickets?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:53:04.789 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/manager/clients-with-tickets?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:53:04.793 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:04.796 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:04.798 +03:00 [INF] HTTP OPTIONS /api/manager/clients-with-tickets responded 204 in 5.1609 ms
+2026-06-18 11:53:04.800 +03:00 [INF] HTTP OPTIONS /api/manager/clients-with-tickets responded 204 in 5.0854 ms
+2026-06-18 11:53:04.806 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/manager/clients-with-tickets?pageNumber=1&pageSize=10 - 204 null null 17.7102ms
+2026-06-18 11:53:04.807 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/manager/clients-with-tickets?pageNumber=1&pageSize=10 - 204 null null 18.3488ms
+2026-06-18 11:53:04.810 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/manager/clients-with-tickets?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:53:04.826 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:04.827 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.ManagerController.GetClientsWithTickets (TicketingSystem.API)'
+2026-06-18 11:53:04.845 +03:00 [INF] Route matched with {action = "GetClientsWithTickets", controller = "Manager"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetClientsWithTickets(TicketingSystem.Services.Helpers.PaginationDto) on controller TicketingSystem.API.Controllers.ManagerController (TicketingSystem.API).
+2026-06-18 11:53:04.874 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Users] AS [u]
+WHERE [u].[Role] = N'Client'
+2026-06-18 11:53:04.879 +03:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-06-18 11:53:04.882 +03:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-06-18 11:53:04.956 +03:00 [INF] Executed DbCommand (12ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u0].[Id], [u0].[Address], [u0].[DateOfBirth], [u0].[Email], [u0].[FullName], [u0].[ImageUrl], [u0].[IsActive], [u0].[MobileNumber], [u0].[PasswordHash], [u0].[Role], [t].[Id], [t].[AssignedEmployeeId], [t].[CreatedAt], [t].[Description], [t].[ProductId], [t].[Status], [t].[Title], [t].[UserId]
+FROM (
+    SELECT [u].[Id], [u].[Address], [u].[DateOfBirth], [u].[Email], [u].[FullName], [u].[ImageUrl], [u].[IsActive], [u].[MobileNumber], [u].[PasswordHash], [u].[Role]
+    FROM [Users] AS [u]
+    WHERE [u].[Role] = N'Client'
+    ORDER BY (SELECT 1)
+    OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+) AS [u0]
+LEFT JOIN [Tickets] AS [t] ON [u0].[Id] = [t].[UserId]
+ORDER BY [u0].[Id]
+2026-06-18 11:53:04.985 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:53:04.993 +03:00 [INF] Executed action TicketingSystem.API.Controllers.ManagerController.GetClientsWithTickets (TicketingSystem.API) in 139.9413ms
+2026-06-18 11:53:04.995 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/manager/clients-with-tickets?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:53:04.995 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.ManagerController.GetClientsWithTickets (TicketingSystem.API)'
+2026-06-18 11:53:04.999 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:05.000 +03:00 [INF] HTTP GET /api/manager/clients-with-tickets responded 200 in 174.4490 ms
+2026-06-18 11:53:05.002 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.ManagerController.GetClientsWithTickets (TicketingSystem.API)'
+2026-06-18 11:53:05.003 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/manager/clients-with-tickets?pageNumber=1&pageSize=10 - 200 null application/json; charset=utf-8 193.1692ms
+2026-06-18 11:53:05.005 +03:00 [INF] Route matched with {action = "GetClientsWithTickets", controller = "Manager"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetClientsWithTickets(TicketingSystem.Services.Helpers.PaginationDto) on controller TicketingSystem.API.Controllers.ManagerController (TicketingSystem.API).
+2026-06-18 11:53:05.017 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Users] AS [u]
+WHERE [u].[Role] = N'Client'
+2026-06-18 11:53:05.029 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u0].[Id], [u0].[Address], [u0].[DateOfBirth], [u0].[Email], [u0].[FullName], [u0].[ImageUrl], [u0].[IsActive], [u0].[MobileNumber], [u0].[PasswordHash], [u0].[Role], [t].[Id], [t].[AssignedEmployeeId], [t].[CreatedAt], [t].[Description], [t].[ProductId], [t].[Status], [t].[Title], [t].[UserId]
+FROM (
+    SELECT [u].[Id], [u].[Address], [u].[DateOfBirth], [u].[Email], [u].[FullName], [u].[ImageUrl], [u].[IsActive], [u].[MobileNumber], [u].[PasswordHash], [u].[Role]
+    FROM [Users] AS [u]
+    WHERE [u].[Role] = N'Client'
+    ORDER BY (SELECT 1)
+    OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+) AS [u0]
+LEFT JOIN [Tickets] AS [t] ON [u0].[Id] = [t].[UserId]
+ORDER BY [u0].[Id]
+2026-06-18 11:53:05.041 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:53:05.043 +03:00 [INF] Executed action TicketingSystem.API.Controllers.ManagerController.GetClientsWithTickets (TicketingSystem.API) in 32.6557ms
+2026-06-18 11:53:05.045 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.ManagerController.GetClientsWithTickets (TicketingSystem.API)'
+2026-06-18 11:53:05.049 +03:00 [INF] HTTP GET /api/manager/clients-with-tickets responded 200 in 50.9669 ms
+2026-06-18 11:53:05.054 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/manager/clients-with-tickets?pageNumber=1&pageSize=10 - 200 null application/json; charset=utf-8 59.4621ms
+2026-06-18 11:53:05.942 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/products?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:53:05.943 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/products?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:53:05.956 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:05.976 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:05.976 +03:00 [INF] HTTP OPTIONS /api/products responded 204 in 20.9207 ms
+2026-06-18 11:53:05.977 +03:00 [INF] HTTP OPTIONS /api/products responded 204 in 1.8897 ms
+2026-06-18 11:53:05.986 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/products?pageNumber=1&pageSize=10 - 204 null null 43.6706ms
+2026-06-18 11:53:05.989 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/products?pageNumber=1&pageSize=10 - 204 null null 46.4946ms
+2026-06-18 11:53:05.989 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/products?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:53:06.025 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:06.033 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.ProductController.GetAll (TicketingSystem.API)'
+2026-06-18 11:53:06.061 +03:00 [INF] Route matched with {action = "GetAll", controller = "Product"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll(TicketingSystem.Services.Helpers.PaginationDto) on controller TicketingSystem.API.Controllers.ProductController (TicketingSystem.API).
+2026-06-18 11:53:06.112 +03:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Products] AS [p]
+WHERE [p].[IsActive] = CAST(1 AS bit)
+2026-06-18 11:53:06.121 +03:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-06-18 11:53:06.123 +03:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-06-18 11:53:06.169 +03:00 [INF] Executed DbCommand (14ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Description], [p].[IsActive], [p].[Name]
+FROM [Products] AS [p]
+WHERE [p].[IsActive] = CAST(1 AS bit)
+ORDER BY (SELECT 1)
+OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+2026-06-18 11:53:06.207 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:53:06.216 +03:00 [INF] Executed action TicketingSystem.API.Controllers.ProductController.GetAll (TicketingSystem.API) in 143.6955ms
+2026-06-18 11:53:06.219 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/products?pageNumber=1&pageSize=10 - null null
+2026-06-18 11:53:06.219 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.ProductController.GetAll (TicketingSystem.API)'
+2026-06-18 11:53:06.228 +03:00 [INF] HTTP GET /api/products responded 200 in 202.5866 ms
+2026-06-18 11:53:06.224 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:06.240 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/products?pageNumber=1&pageSize=10 - 200 null application/json; charset=utf-8 250.6916ms
+2026-06-18 11:53:06.244 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.ProductController.GetAll (TicketingSystem.API)'
+2026-06-18 11:53:06.260 +03:00 [INF] Route matched with {action = "GetAll", controller = "Product"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll(TicketingSystem.Services.Helpers.PaginationDto) on controller TicketingSystem.API.Controllers.ProductController (TicketingSystem.API).
+2026-06-18 11:53:06.275 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Products] AS [p]
+WHERE [p].[IsActive] = CAST(1 AS bit)
+2026-06-18 11:53:06.292 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Description], [p].[IsActive], [p].[Name]
+FROM [Products] AS [p]
+WHERE [p].[IsActive] = CAST(1 AS bit)
+ORDER BY (SELECT 1)
+OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+2026-06-18 11:53:06.301 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:53:06.305 +03:00 [INF] Executed action TicketingSystem.API.Controllers.ProductController.GetAll (TicketingSystem.API) in 35.9083ms
+2026-06-18 11:53:06.313 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.ProductController.GetAll (TicketingSystem.API)'
+2026-06-18 11:53:06.317 +03:00 [INF] HTTP GET /api/products responded 200 in 92.6947 ms
+2026-06-18 11:53:06.322 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/products?pageNumber=1&pageSize=10 - 200 null application/json; charset=utf-8 103.5618ms
+2026-06-18 11:53:11.184 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/dashboard/status - null null
+2026-06-18 11:53:11.184 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/dashboard/top-employees - null null
+2026-06-18 11:53:11.188 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/dashboard/status - null null
+2026-06-18 11:53:11.188 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/dashboard/trend - null null
+2026-06-18 11:53:11.184 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/dashboard/trend - null null
+2026-06-18 11:53:11.220 +03:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:7160/api/dashboard/top-employees - null null
+2026-06-18 11:53:11.223 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:11.229 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:11.241 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:11.247 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:11.281 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:11.304 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:11.318 +03:00 [INF] HTTP OPTIONS /api/dashboard/status responded 204 in 95.2142 ms
+2026-06-18 11:53:11.320 +03:00 [INF] HTTP OPTIONS /api/dashboard/top-employees responded 204 in 91.1345 ms
+2026-06-18 11:53:11.321 +03:00 [INF] HTTP OPTIONS /api/dashboard/status responded 204 in 80.5343 ms
+2026-06-18 11:53:11.345 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/dashboard/top-employees - 204 null null 161.1262ms
+2026-06-18 11:53:11.395 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/dashboard/status - 204 null null 207.4039ms
+2026-06-18 11:53:11.322 +03:00 [INF] HTTP OPTIONS /api/dashboard/trend responded 204 in 75.3613 ms
+2026-06-18 11:53:11.324 +03:00 [INF] HTTP OPTIONS /api/dashboard/trend responded 204 in 43.6521 ms
+2026-06-18 11:53:11.342 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/dashboard/status - 204 null null 158.6701ms
+2026-06-18 11:53:11.326 +03:00 [INF] HTTP OPTIONS /api/dashboard/top-employees responded 204 in 22.6564 ms
+2026-06-18 11:53:11.352 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/dashboard/status - null null
+2026-06-18 11:53:11.354 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/dashboard/top-employees - null null
+2026-06-18 11:53:11.506 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/dashboard/trend - 204 null null 317.839ms
+2026-06-18 11:53:11.509 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/dashboard/trend - null null
+2026-06-18 11:53:11.511 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/dashboard/trend - 204 null null 327.1056ms
+2026-06-18 11:53:11.542 +03:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:7160/api/dashboard/top-employees - 204 null null 322.6954ms
+2026-06-18 11:53:11.574 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:11.593 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:11.609 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:11.632 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.DashboardController.Status (TicketingSystem.API)'
+2026-06-18 11:53:11.635 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.DashboardController.TopEmployees (TicketingSystem.API)'
+2026-06-18 11:53:11.638 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.DashboardController.Trend (TicketingSystem.API)'
+2026-06-18 11:53:11.641 +03:00 [INF] Route matched with {action = "Status", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Status() on controller TicketingSystem.API.Controllers.DashboardController (TicketingSystem.API).
+2026-06-18 11:53:11.658 +03:00 [INF] Route matched with {action = "TopEmployees", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] TopEmployees() on controller TicketingSystem.API.Controllers.DashboardController (TicketingSystem.API).
+2026-06-18 11:53:11.661 +03:00 [INF] Route matched with {action = "Trend", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Trend() on controller TicketingSystem.API.Controllers.DashboardController (TicketingSystem.API).
+2026-06-18 11:53:11.719 +03:00 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE [t].[Status]
+    WHEN 0 THEN N'New'
+    WHEN 1 THEN N'Assigned'
+    WHEN 2 THEN N'InProgress'
+    WHEN 3 THEN N'Resolved'
+    WHEN 4 THEN N'Closed'
+    ELSE CAST([t].[Status] AS nvarchar(max))
+END AS [Status], COUNT(*) AS [Count]
+FROM [Tickets] AS [t]
+GROUP BY [t].[Status]
+2026-06-18 11:53:11.728 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[@p='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(@p) [u].[FullName] AS [EmployeeName], COUNT(CASE
+    WHEN [t].[Status] = 3 THEN 1
+END) AS [ResolvedCount]
+FROM [Tickets] AS [t]
+LEFT JOIN [Users] AS [u] ON [t].[AssignedEmployeeId] = [u].[Id]
+WHERE [t].[AssignedEmployeeId] IS NOT NULL
+GROUP BY [t].[AssignedEmployeeId], [u].[FullName]
+ORDER BY COUNT(CASE
+    WHEN [t].[Status] = 3 THEN 1
+END) DESC
+2026-06-18 11:53:11.736 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [t0].[Key] AS [Date], COUNT(*) AS [Count]
+FROM (
+    SELECT CONVERT(date, [t].[CreatedAt]) AS [Key]
+    FROM [Tickets] AS [t]
+) AS [t0]
+GROUP BY [t0].[Key]
+ORDER BY [t0].[Key]
+2026-06-18 11:53:11.736 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:53:11.741 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:53:11.747 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:53:11.754 +03:00 [INF] Executed action TicketingSystem.API.Controllers.DashboardController.Status (TicketingSystem.API) in 61.2406ms
+2026-06-18 11:53:11.762 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/dashboard/status - null null
+2026-06-18 11:53:11.767 +03:00 [INF] Executed action TicketingSystem.API.Controllers.DashboardController.TopEmployees (TicketingSystem.API) in 57.48ms
+2026-06-18 11:53:11.772 +03:00 [INF] Executed action TicketingSystem.API.Controllers.DashboardController.Trend (TicketingSystem.API) in 47.1683ms
+2026-06-18 11:53:11.773 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/dashboard/top-employees - null null
+2026-06-18 11:53:11.776 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7160/api/dashboard/trend - null null
+2026-06-18 11:53:11.778 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.DashboardController.Status (TicketingSystem.API)'
+2026-06-18 11:53:11.789 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:11.791 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.DashboardController.TopEmployees (TicketingSystem.API)'
+2026-06-18 11:53:11.794 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.DashboardController.Trend (TicketingSystem.API)'
+2026-06-18 11:53:11.806 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:11.858 +03:00 [INF] CORS policy execution successful.
+2026-06-18 11:53:11.873 +03:00 [INF] HTTP GET /api/dashboard/status responded 200 in 299.0833 ms
+2026-06-18 11:53:11.875 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.DashboardController.Status (TicketingSystem.API)'
+2026-06-18 11:53:11.903 +03:00 [INF] HTTP GET /api/dashboard/top-employees responded 200 in 310.2578 ms
+2026-06-18 11:53:11.911 +03:00 [INF] HTTP GET /api/dashboard/trend responded 200 in 301.7960 ms
+2026-06-18 11:53:11.914 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.DashboardController.TopEmployees (TicketingSystem.API)'
+2026-06-18 11:53:11.917 +03:00 [INF] Executing endpoint 'TicketingSystem.API.Controllers.DashboardController.Trend (TicketingSystem.API)'
+2026-06-18 11:53:11.925 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/dashboard/status - 200 null application/json; charset=utf-8 573.054ms
+2026-06-18 11:53:11.928 +03:00 [INF] Route matched with {action = "Status", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Status() on controller TicketingSystem.API.Controllers.DashboardController (TicketingSystem.API).
+2026-06-18 11:53:11.940 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/dashboard/top-employees - 200 null application/json; charset=utf-8 586.5864ms
+2026-06-18 11:53:11.954 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/dashboard/trend - 200 null application/json; charset=utf-8 445.3284ms
+2026-06-18 11:53:11.959 +03:00 [INF] Route matched with {action = "TopEmployees", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] TopEmployees() on controller TicketingSystem.API.Controllers.DashboardController (TicketingSystem.API).
+2026-06-18 11:53:11.961 +03:00 [INF] Route matched with {action = "Trend", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Trend() on controller TicketingSystem.API.Controllers.DashboardController (TicketingSystem.API).
+2026-06-18 11:53:11.989 +03:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE [t].[Status]
+    WHEN 0 THEN N'New'
+    WHEN 1 THEN N'Assigned'
+    WHEN 2 THEN N'InProgress'
+    WHEN 3 THEN N'Resolved'
+    WHEN 4 THEN N'Closed'
+    ELSE CAST([t].[Status] AS nvarchar(max))
+END AS [Status], COUNT(*) AS [Count]
+FROM [Tickets] AS [t]
+GROUP BY [t].[Status]
+2026-06-18 11:53:12.074 +03:00 [INF] Executed DbCommand (42ms) [Parameters=[@p='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(@p) [u].[FullName] AS [EmployeeName], COUNT(CASE
+    WHEN [t].[Status] = 3 THEN 1
+END) AS [ResolvedCount]
+FROM [Tickets] AS [t]
+LEFT JOIN [Users] AS [u] ON [t].[AssignedEmployeeId] = [u].[Id]
+WHERE [t].[AssignedEmployeeId] IS NOT NULL
+GROUP BY [t].[AssignedEmployeeId], [u].[FullName]
+ORDER BY COUNT(CASE
+    WHEN [t].[Status] = 3 THEN 1
+END) DESC
+2026-06-18 11:53:12.140 +03:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [t0].[Key] AS [Date], COUNT(*) AS [Count]
+FROM (
+    SELECT CONVERT(date, [t].[CreatedAt]) AS [Key]
+    FROM [Tickets] AS [t]
+) AS [t0]
+GROUP BY [t0].[Key]
+ORDER BY [t0].[Key]
+2026-06-18 11:53:12.144 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:53:12.159 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:53:12.171 +03:00 [INF] Executing ObjectResult, writing value of type 'TicketingSystem.API.Common.ApiResponse'.
+2026-06-18 11:53:12.176 +03:00 [INF] Executed action TicketingSystem.API.Controllers.DashboardController.Status (TicketingSystem.API) in 199.5853ms
+2026-06-18 11:53:12.194 +03:00 [INF] Executed action TicketingSystem.API.Controllers.DashboardController.TopEmployees (TicketingSystem.API) in 165.4829ms
+2026-06-18 11:53:12.201 +03:00 [INF] Executed action TicketingSystem.API.Controllers.DashboardController.Trend (TicketingSystem.API) in 69.2045ms
+2026-06-18 11:53:12.230 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.DashboardController.Trend (TicketingSystem.API)'
+2026-06-18 11:53:12.207 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.DashboardController.TopEmployees (TicketingSystem.API)'
+2026-06-18 11:53:12.203 +03:00 [INF] Executed endpoint 'TicketingSystem.API.Controllers.DashboardController.Status (TicketingSystem.API)'
+2026-06-18 11:53:12.241 +03:00 [INF] HTTP GET /api/dashboard/trend responded 200 in 383.5806 ms
+2026-06-18 11:53:12.243 +03:00 [INF] HTTP GET /api/dashboard/top-employees responded 200 in 437.1643 ms
+2026-06-18 11:53:12.261 +03:00 [INF] HTTP GET /api/dashboard/status responded 200 in 472.3408 ms
+2026-06-18 11:53:12.474 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/dashboard/trend - 200 null application/json; charset=utf-8 697.2416ms
+2026-06-18 11:53:12.479 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/dashboard/top-employees - 200 null application/json; charset=utf-8 705.5786ms
+2026-06-18 11:53:12.718 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7160/api/dashboard/status - 200 null application/json; charset=utf-8 955.9622ms

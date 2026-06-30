@@ -4,6 +4,6 @@ using TicketingSystem.Services.Helpers;
 
 namespace TicketingSystem.Services.Features.ProductMediator.Queries
 {
-    public record GetAllProductsQuery(PaginationDto Pagination)
+    public record GetAllProductsQuery(PaginationDto Pagination, string? Search)
         : IRequest<PagedResult<ProductDto>>;
 }

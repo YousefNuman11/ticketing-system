@@ -41,7 +41,7 @@ namespace TicketingSystem.Services.Features.AuthMediator.Commands
             var user = _mapper.Map<User>(dto);
 
             user.Id = Guid.NewGuid();
-            user.Role = UserRole.Client; // Only the manager can create employees
+            user.Role = UserRole.Client; 
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
             user.IsActive = true;
 

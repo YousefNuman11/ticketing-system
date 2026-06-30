@@ -23,10 +23,19 @@ namespace TicketingSystem.Services.Features.TicketMediator.Queries
             CancellationToken cancellationToken)
         {
             var ticket = await _unitOfWork.Tickets
-                .GetByUserId(request.ClientId)
+                .QueryTickets()
                 .FirstOrDefaultAsync(t => t.Id == request.TicketId, cancellationToken);
 
-            return ticket == null ? null : _mapper.Map<TicketDto>(ticket);
+            if (ticket == null)
+                return null;
+
+            var isOwner = ticket.UserId == request.ClientId;
+            var isAssignedEmployee = ticket.AssignedEmployeeId == request.ClientId;
+
+            if (!isOwner && !isAssignedEmployee)
+                return null;
+
+            return _mapper.Map<TicketDto>(ticket);
         }
     }
 }

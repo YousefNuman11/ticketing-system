@@ -4,6 +4,6 @@ using TicketingSystem.Services.Helpers;
 
 namespace TicketingSystem.Services.Features.ManagerMediator.Queries
 {
-    public record GetClientsWithTicketsQuery(PaginationDto Pagination)
+    public record GetClientsWithTicketsQuery(PaginationDto Pagination, string? Search)
         : IRequest<PagedResult<ClientWithTicketsDto>>;
 }

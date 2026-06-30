@@ -54,6 +54,12 @@ namespace TicketingSystem.Repository.Data
                 .HasForeignKey(ta => ta.TicketId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<TicketAttachment>()
+                .HasOne(ta => ta.User)
+                .WithMany()
+                .HasForeignKey(ta => ta.UploadedBy)
+                .OnDelete(DeleteBehavior.NoAction);
+
 
             modelBuilder.Entity<User>()
                 .Property(u => u.Role)

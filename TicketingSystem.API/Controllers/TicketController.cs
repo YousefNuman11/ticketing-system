@@ -26,10 +26,11 @@ namespace TicketingSystem.API.Controllers
         // All tickets for the current client
         [Authorize(Roles = "Client")]
         [HttpGet("myTickets")]
-        public async Task<IActionResult> GetMyTickets([FromQuery] PaginationDto pagination)
+        public async Task<IActionResult> GetMyTickets([FromQuery] PaginationDto pagination,
+            [FromQuery] string? search)
         {
             var result = await _mediator.Send(
-                new GetMyTicketsQuery(CurrentUserId, pagination));
+                new GetMyTicketsQuery(CurrentUserId, pagination, search));
             return Ok(result);
         }
 

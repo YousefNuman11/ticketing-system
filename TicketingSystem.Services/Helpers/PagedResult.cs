@@ -2,10 +2,6 @@ using System.Collections;
 
 namespace TicketingSystem.Services.Helpers
 {
-    /// <summary>
-    /// Non-generic view over a paged result so the API layer can split
-    /// items (data) from pagination metadata without reflection.
-    /// </summary>
     public interface IPagedResult
     {
         int PageNumber { get; }

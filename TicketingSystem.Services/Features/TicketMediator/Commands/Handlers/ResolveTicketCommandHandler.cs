@@ -1,6 +1,9 @@
 using MediatR;
 using TicketingSystem.Repository.Models;
+using TicketingSystem.Repository.Specifications.Tickets;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
+using TicketingSystem.Services.AI;
+using TicketingSystem.Services.AI.Abstraction;
 using TicketingSystem.Services.Exceptions;
 
 namespace TicketingSystem.Services.Features.TicketMediator.Commands
@@ -9,17 +12,22 @@ namespace TicketingSystem.Services.Features.TicketMediator.Commands
         : IRequestHandler<ResolveTicketCommand>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEmbeddingService _embeddingService;
 
-        public ResolveTicketCommandHandler(IUnitOfWork unitOfWork)
+        public ResolveTicketCommandHandler(
+            IUnitOfWork unitOfWork, IEmbeddingService embeddingService)
         {
             _unitOfWork = unitOfWork;
+            _embeddingService = embeddingService;
         }
 
         public async Task Handle(
             ResolveTicketCommand request,
             CancellationToken cancellationToken)
         {
-            var ticket = await _unitOfWork.Tickets.GetByIdAsync(request.TicketId);
+
+            var spec = new TicketWithCommentsByIdSpec(request.TicketId);
+            var ticket = (await _unitOfWork.Tickets.ListAsync(spec)).FirstOrDefault();
 
             if (ticket == null)
                 throw new NotFoundException("Ticket not found");
@@ -30,6 +38,19 @@ namespace TicketingSystem.Services.Features.TicketMediator.Commands
             ticket.Status = TicketStatus.Resolved;
 
             await _unitOfWork.SaveChangesAsync();
+
+            try
+            {
+                var textToEmbed = TicketEmbeddingTextBuilder.Build(ticket);
+                var embedding = await _embeddingService.EmbedAsync(textToEmbed, cancellationToken);
+
+                ticket.EmbeddingJson = System.Text.Json.JsonSerializer.Serialize(embedding);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch
+            {
+
+            }
         }
     }
 }

@@ -28,7 +28,8 @@ namespace TicketingSystem.API.Controllers
 
         // Any authenticated user can list products (clients need them to open a ticket)
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] PaginationDto pagination)
-            => Ok(await _mediator.Send(new GetAllProductsQuery(pagination)));
+        public async Task<IActionResult> GetAll([FromQuery] PaginationDto pagination,
+            [FromQuery] string? search)
+            => Ok(await _mediator.Send(new GetAllProductsQuery(pagination, search)));
     }
 }

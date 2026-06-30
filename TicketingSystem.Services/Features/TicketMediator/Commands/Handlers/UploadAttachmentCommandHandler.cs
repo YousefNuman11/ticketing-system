@@ -35,6 +35,7 @@ namespace TicketingSystem.Services.Features.TicketMediator.Commands
             }
 
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+            Console.WriteLine($"UploadedBy: {request.UserId}");
 
             if (!Directory.Exists(uploadsFolder))
                 Directory.CreateDirectory(uploadsFolder);
@@ -53,7 +54,7 @@ namespace TicketingSystem.Services.Features.TicketMediator.Commands
                 Id = Guid.NewGuid(),
                 TicketId = request.TicketId,
                 FileName = request.File.FileName,
-                FileUrl = uniqueFileName,
+                FileUrl = $"/uploads/{ uniqueFileName }",
                 UploadedBy = request.UserId,
                 CreatedAt = DateTime.UtcNow
             };

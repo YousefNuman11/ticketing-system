@@ -60,6 +60,9 @@ namespace TicketingSystem.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EmbeddingJson")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
@@ -107,14 +110,11 @@ namespace TicketingSystem.Repository.Migrations
                     b.Property<Guid>("UploadedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("TicketId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UploadedBy");
 
                     b.ToTable("TicketAttachments");
                 });
@@ -228,8 +228,8 @@ namespace TicketingSystem.Repository.Migrations
 
                     b.HasOne("TicketingSystem.Repository.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("UploadedBy")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Ticket");

@@ -3,9 +3,9 @@ import { useAuth } from './context/AuthContext.jsx';
 import { ROLES } from './utils/constants';
 import ProtectedRoute from './routes/ProtectedRoute.jsx';
 import DashboardLayout from './components/layout/DashboardLayout.jsx';
+import Settings from './pages/Settings.jsx';
 
-import Login from './pages/auth/Login.jsx';
-import Register from './pages/auth/Register.jsx';
+import AuthPage from './pages/auth/AuthPage.jsx';
 import NotFound from './pages/NotFound.jsx';
 
 import ManagerDashboard from './pages/manager/Dashboard.jsx';
@@ -34,8 +34,7 @@ function RoleHome() {
 export default function App() {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<AuthPage />} />
 
       <Route
         element={
@@ -45,6 +44,7 @@ export default function App() {
         }
       >
         <Route path="/" element={<RoleHome />} />
+        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
 
         {/* Manager */}
         <Route path="/manager" element={<ProtectedRoute roles={[ROLES.MANAGER]}><ManagerDashboard /></ProtectedRoute>} />

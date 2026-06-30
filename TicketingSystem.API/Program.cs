@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -13,8 +14,11 @@ using TicketingSystem.API.Common;
 using TicketingSystem.API.Middleware;
 using TicketingSystem.Repository.Data;
 using TicketingSystem.Repository.Models;
+using TicketingSystem.Repository.Search;
 using TicketingSystem.Repository.UnitOfWork;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
+using TicketingSystem.Services.AI;
+using TicketingSystem.Services.AI.Abstraction;
 using TicketingSystem.Services.Mapping;
 using TicketingSystem.Services.Settings;
 
@@ -151,6 +155,24 @@ builder.Services
         };
     });
 
+
+//LuceneSearch
+
+builder.Services.AddSingleton<IUserSearchService>(_ =>
+    new LuceneUserSearchService(
+        Path.Combine(Directory.GetCurrentDirectory(), "LuceneIndex", "Users")));
+
+
+//OpenAI embeddings
+builder.Services.Configure<OpenAiSettings>(
+    builder.Configuration.GetSection("OpenAi"));
+
+builder.Services.AddHttpClient<IEmbeddingService, OpenAiEmbeddingService>();
+
+
+builder.Services.AddHttpClient<IChatCompletionService, OpenAiChatCompletionService>();
+builder.Services.AddSingleton<ICosineSimilarityService, CosineSimilarityService>();
+
 var app = builder.Build();
 
 // Seeding the manager
@@ -180,6 +202,45 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+// Backfill: embed any already-Resolved tickets that predate the RAG feature
+// (i.e. have no embedding yet). Safe to run on every startup — only processes
+// tickets where EmbeddingJson is still null, so already-indexed tickets are skipped.
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<TicketingSystemDbContext>();
+    var embeddingService = scope.ServiceProvider.GetRequiredService<IEmbeddingService>();
+
+    var unembeddedResolvedTickets = context.Tickets
+        .Include(t => t.TicketsComments)
+        .Where(t => t.Status == TicketStatus.Resolved && t.EmbeddingJson == null)
+        .ToList();
+
+    var embeddedCount = 0;
+
+    foreach (var ticket in unembeddedResolvedTickets)
+    {
+        try
+        {
+            var textToEmbed = TicketEmbeddingTextBuilder.Build(ticket);
+            var embedding = await embeddingService.EmbedAsync(textToEmbed);
+            ticket.EmbeddingJson = System.Text.Json.JsonSerializer.Serialize(embedding);
+            embeddedCount++;
+        }
+        catch (Exception ex)
+        {
+            Log.Warning(ex, "Failed to embed ticket {TicketId} during backfill", ticket.Id);
+        }
+    }
+
+    if (embeddedCount > 0)
+    {
+        await context.SaveChangesAsync();
+    }
+
+    Log.Information("RAG backfill: embedded {Count} of {Total} resolved tickets",
+        embeddedCount, unembeddedResolvedTickets.Count);
+}
+
 
 // Log each request, then convert thrown exceptions into the standard ApiResponse envelope.
 app.UseSerilogRequestLogging();
@@ -198,6 +259,14 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(SpaCorsPolicy);
+
+// Serve uploaded attachments from {ProjectRoot}/Uploads at /uploads/*
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "Uploads")),
+    RequestPath = "/uploads"
+});
 
 app.UseAuthentication();
 app.UseAuthorization();

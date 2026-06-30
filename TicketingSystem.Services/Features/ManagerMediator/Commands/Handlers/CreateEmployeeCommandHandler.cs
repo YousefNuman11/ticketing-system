@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using TicketingSystem.Repository.Models;
+using TicketingSystem.Repository.Search;
 using TicketingSystem.Repository.UnitOfWork.Abstraction;
 using TicketingSystem.Services.Features.ManagerMediator.Contracts;
 
@@ -11,11 +12,15 @@ namespace TicketingSystem.Services.Features.ManagerMediator.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IUserSearchService _searchService;
 
-        public CreateEmployeeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public CreateEmployeeCommandHandler(IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IUserSearchService searchService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _searchService = searchService;
         }
 
         public async Task<UserDto> Handle(
@@ -31,6 +36,9 @@ namespace TicketingSystem.Services.Features.ManagerMediator.Commands
 
             await _unitOfWork.Users.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();
+
+            _searchService.IndexUser(
+                user.Id, user.FullName, user.Email, user.Address, user.Role.ToString());
 
             return _mapper.Map<UserDto>(user);
         }
